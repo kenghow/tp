@@ -25,7 +25,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/pr8190.png" width="200px">
 
-[[github](http://github.com/pr8190)] 
+[[github](http://github.com/pr8190)]
 [[portfolio](team/pr8190.md)]
 
 - Role: Developer
@@ -39,3 +39,4 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities:
+

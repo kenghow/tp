@@ -8,7 +8,9 @@
         "about-us": "About Us",
         "project-team": "Project team",
         "jain-ananya": "Jain Ananya",
-        "pooja-raju": "Pooja Raju"
+        "pooja-raju": "Pooja Raju",
+        "achar-pavithra": "Achar Pavithra",
+        "hunter-raiyu-dinh": "Hunter Raiyu Dinh"
       },
       "headingKeywords": {}
     },
@@ -141,7 +143,7 @@
       "headingKeywords": {}
     },
     {
-      "src": "team/johndoe.md",
+      "src": "team/dinhcodes.md",
       "title": "John Doe's Project Portfolio Page",
       "headings": {
         "project-addressbook-level-3": "Project: AddressBook Level 3"

@@ -1,6 +1,8 @@
 package seedu.address.model.util;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
@@ -11,6 +13,8 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.RoomNumber;
 import seedu.address.model.person.StudentId;
+import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.TagType;
 
 
 /**
@@ -48,5 +52,16 @@ public class SampleDataUtil {
         return sampleAb;
     }
 
-
+    /**
+     * Returns a tag set containing the list of strings given.
+     */
+    public static Set<Tag> getTagSet(Object[]... tags) {
+        Set<Tag> tagSet = new HashSet<>();
+        for (Object[] pair: tags) {
+            TagType type = TagType.valueOf(pair[0].toString());
+            String tagName = pair[1].toString();
+            tagSet.add(new Tag(type, tagName));
+        }
+        return tagSet;
+    }
 }

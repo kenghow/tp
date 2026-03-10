@@ -14,6 +14,10 @@ import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagType;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
  */
@@ -143,14 +147,19 @@ public class ParserUtil {
         return new Tag(type, trimmedTag); // uses the simple constructor
     }
 
-    //    public static Set<Tag> parseTags(Collection<String> tags) throws ParseException {
-    //        requireNonNull(tags);
-    //        final Set<Tag> tagSet = new HashSet<>();
-    //
-    //        for (String tagName : tags) {
-    //            tagSet.add(parseTag(tagName));
-    //        }
-    //
-    //        return tagSet;
-    //    }
+        public static Set<Tag> parseTags(Collection<Tag> tags) throws ParseException {
+            requireNonNull(tags);
+            final Set<Tag> tagSet = new HashSet<>();
+
+            for (Tag tag : tags) {
+                try {
+                    tagSet.add(parseTag(tag.type, tag.tagName));
+                } catch(IllegalArgumentException e) {
+                    throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
+                }
+
+            }
+
+            return tagSet;
+        }
 }

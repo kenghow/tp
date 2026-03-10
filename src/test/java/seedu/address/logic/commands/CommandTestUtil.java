@@ -14,13 +14,16 @@ import static seedu.address.testutil.Assert.assertThrows;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
+import org.junit.jupiter.api.Tag;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.TagType;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
 /**
@@ -40,8 +43,8 @@ public class CommandTestUtil {
     public static final String VALID_ROOM_NUMBER_BOB = "R321";
     public static final String VALID_EMERGENCY_CONTACT_AMY = "91234567";
     public static final String VALID_EMERGENCY_CONTACT_BOB = "98765432";
-    public static final String VALID_TAG_HUSBAND = "husband";
-    public static final String VALID_TAG_FRIEND = "friend";
+    public static final Object[] VALID_TAG_MAJOR = {TagType.MAJOR, "CS"};
+    public static final Object[] VALID_TAG_YEAR = {TagType.YEAR, "Y1"};
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -57,8 +60,8 @@ public class CommandTestUtil {
             + VALID_EMERGENCY_CONTACT_AMY;
     public static final String EMERGENCY_CONTACT_DESC_BOB = " " + PREFIX_EMERGENCY_CONTACT
             + VALID_EMERGENCY_CONTACT_BOB;
-    public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
-    public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
+    public static final String TAG_DESC_YEAR = " " + PREFIX_TAG + VALID_TAG_YEAR;
+    public static final String TAG_DESC_MAJOR = " " + PREFIX_TAG + VALID_TAG_MAJOR[1];
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
@@ -75,10 +78,10 @@ public class CommandTestUtil {
     static {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withAddress(VALID_STUDENTID_AMY)
-                .withTags(VALID_TAG_FRIEND).build();
+                .withTags(VALID_TAG_YEAR).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withAddress(VALID_STUDENTID_BOB)
-                .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+                .withTags(VALID_TAG_MAJOR, VALID_TAG_YEAR).build();
     }
 
     /**

@@ -1,5 +1,20 @@
 package seedu.address.testutil;
 
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EMERGENCY_CONTACT_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROOM_NUMBER_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROOM_NUMBER_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENTID_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENTID_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_MAJOR;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_YEAR;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,8 +22,6 @@ import java.util.List;
 import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.TagType;
-
-import static seedu.address.logic.commands.CommandTestUtil.*;
 
 public class TypicalPersons {
 

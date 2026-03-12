@@ -15,6 +15,8 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_STUDENTID_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_MAJOR;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_YEAR;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
 import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.TagType;
+import seedu.address.storage.JsonAddressBookStorage;
 
 /**
  * A list of person data in the correct format
@@ -91,5 +94,14 @@ public class TypicalPersons {
 
     public static List<Person> getTypicalPersons() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    /** Regenerates the typical persons JSON file. This allows easy updating of typicalPersonsAddressBook. */
+    public static void main(String[] args) throws IOException {
+        new JsonAddressBookStorage(Paths.get(
+                "src", "test", "data", "JsonSerializableAddressBookTest",
+                "typicalPersonsAddressBook.json"))
+                .saveAddressBook(getTypicalAddressBook());
+        System.out.println("Done.");
     }
 }

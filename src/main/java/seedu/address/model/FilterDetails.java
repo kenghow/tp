@@ -92,4 +92,19 @@ public class FilterDetails {
     public Set<String> getTagGenderKeywords() {
         return tagGenderKeywords;
     }
+
+    @Override
+    public String toString() {
+        return "FilterDetails{"
+                + "nameKeywords=" + nameKeywords
+                + ", emailKeywords=" + emailKeywords
+                + ", phoneNumberKeywords=" + phoneNumberKeywords
+                + ", roomNumberKeywords=" + roomNumberKeywords
+                + ", studentIdKeywords=" + studentIdKeywords
+                + ", emergencyContactKeywords=" + emergencyContactKeywords
+                + ", tagYearKeywords=" + tagYearKeywords
+                + ", tagMajorKeywords=" + tagMajorKeywords
+                + ", tagGenderKeywords=" + tagGenderKeywords
+                + '}';
+    }
 }

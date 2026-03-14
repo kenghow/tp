@@ -61,11 +61,11 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
      */
     private boolean isExactMatchIgnoreCase(String personValue, Set<String> keywords) {
         assert keywords != null : "keywords set should be non-null";
-        if (personValue.isEmpty()) {
-            return false;
-        }
         if (keywords.isEmpty()) {
             return true;
+        }
+        if (personValue.isEmpty()) {
+            return false;
         }
         assert keywords != null : "keywords set should be non-null";
         return StringUtil.matchesWordInSetIgnoreCase(personValue, keywords);

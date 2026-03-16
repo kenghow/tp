@@ -125,9 +125,12 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        return Arrays.stream(trimmedArgs.split("\\s+"))
+        List<String> nameKeywords = Arrays.asList(trimmedArgs.split("\\s+"))
+                .stream()
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .toList();
+
+        return nameKeywords;
     }
 }

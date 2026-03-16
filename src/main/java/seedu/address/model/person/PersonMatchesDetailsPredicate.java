@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.FilterDetails;
@@ -55,10 +56,13 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
         if (keywords.isEmpty()) {
             return false;
         }
-        String lowerField = fieldValue.toLowerCase();
-        return keywords.stream()
-                .map(k -> k.toLowerCase())
-                .anyMatch(lowerField::contains);
+        String lowerCaseFieldValue = fieldValue.toLowerCase();
+
+        Stream<String> lowerKeywordsStream = keywords.stream()
+                .map(String::toLowerCase);
+
+        return lowerKeywordsStream
+                .anyMatch(lowerCaseFieldValue::contains);
     }
 
     // Fuzzy string matching (not case-sensitive)

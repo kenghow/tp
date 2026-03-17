@@ -48,12 +48,12 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         // Preamble and prefixes are both empty -> Output empty argument message
         if (argMultimap.getPreamble().isEmpty() && argMultimap.hasEmptyPrefixArguments()) {
-            throw new ParseException(String.format(MESSAGE_EMPTY_ARGUMENT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_EMPTY_ARGUMENT + "\n" + FindCommand.MESSAGE_USAGE));
         }
 
         // Both preamble and prefixes exist -> Output invalid command format message
         if (!argMultimap.getPreamble().isEmpty() && !argMultimap.hasEmptyPrefixArguments()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT + "\n" + FindCommand.MESSAGE_USAGE));
         }
 
         // Preamble exists, prefixes are empty -> FindCommand search by name
@@ -69,7 +69,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         // Should not reach here because all cases are covered above
-        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT + "\n" + FindCommand.MESSAGE_USAGE));
     }
 
     /**

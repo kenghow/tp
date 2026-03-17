@@ -67,8 +67,8 @@ public class StringUtil {
         checkArgument(!wordSet.isEmpty(), "Word set cannot be empty");
 
         return wordSet.stream()
-                .map(k -> k.toLowerCase().trim())
-                .anyMatch(k -> fuzzyMatchesIgnoresCase(preppedWord, k));
+                .map(query -> query.toLowerCase().trim())
+                .anyMatch(query -> fuzzyMatchesIgnoresCase(query, preppedWord));
     }
 
     /**

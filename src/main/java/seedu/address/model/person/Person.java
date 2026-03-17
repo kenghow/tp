@@ -2,7 +2,10 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
@@ -83,7 +86,7 @@ public class Person {
      * @return the year tags of this person
      */
     public Tag getYear() {
-       return tags.get(TagType.YEAR);
+        return tags.get(TagType.YEAR);
     }
 
     /*

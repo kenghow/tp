@@ -5,7 +5,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_GENDER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_MAJOR;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_YEAR;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
@@ -86,16 +88,16 @@ public class TagCommand extends Command {
         return new CommandResult(String.format(TAG_SUCCESS, taggedPerson));
     }
 
-//    private void checkTagLimits(HashMap<Tag, TagType> updatedTags) throws CommandException {
-//        for (TagType type : TagType.values()) {
-//            long countOfTagsPerType = updatedTags.stream()
-//                    .filter(tag -> tag.getTagType() == type)
-//                    .count();
-//            if (countOfTagsPerType > type.getMaxTagsPerType()) {
-//                throw new CommandException(
-//                        "Tag type " + type + " allows at most " + type.getMaxTagsPerType() + " tag(s) per person."
-//                );
-//            }
-//        }
-//    }
+    //    private void checkTagLimits(HashMap<Tag, TagType> updatedTags) throws CommandException {
+    //        for (TagType type : TagType.values()) {
+    //            long countOfTagsPerType = updatedTags.stream()
+    //                    .filter(tag -> tag.getTagType() == type)
+    //                    .count();
+    //            if (countOfTagsPerType > type.getMaxTagsPerType()) {
+    //                throw new CommandException(
+    //                        "Tag type " + type + " allows at most " + type.getMaxTagsPerType() + " tag(s) per person."
+    //                );
+    //            }
+    //        }
+    //    }
 }

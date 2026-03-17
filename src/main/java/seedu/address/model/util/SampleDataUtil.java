@@ -1,8 +1,6 @@
 package seedu.address.model.util;
 
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;

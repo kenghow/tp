@@ -9,7 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ROOM_NUMBER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;

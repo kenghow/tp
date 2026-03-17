@@ -129,6 +129,22 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_filterByTag_noPersonsFound() {
+        // Zero persons: No one studies CS, is Male, and is in Year 4.
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        FilterDetails filterDetails = createEmptyFilterDetails();
+        filterDetails.setTagMajorKeywords(Set.of("CS"));
+        filterDetails.setTagGenderKeywords(Set.of("Male"));
+        filterDetails.setTagYearKeywords(Set.of("4"));
+        PersonMatchesDetailsPredicate predicate = new PersonMatchesDetailsPredicate(filterDetails);
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(), model.getFilteredPersonList());
+    }
+
+
+    @Test
     public void execute_filterByMultipleFields_personFound() {
         // ALICE: Name "Alice", Phone "94351253"
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);

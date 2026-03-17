@@ -93,8 +93,8 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
 
     /**
      * Checks if any of the {@code personTags} match any of the {@code keywords}.
-     * Fuzzy matching allows for minor typos or differences. Substring matching checks if the keyword is contained
-     * within the value.
+     * Fuzzy matching allows for minor typos or differences.
+     * Substring matching checks if the keyword is contained within the value.
      */
     private boolean isFuzzyMatchTags(Set<Tag> personTags, Set<String> keywords) {
         assert keywords != null : "tag keyword set should be non-null";
@@ -119,10 +119,10 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
      */
     private boolean isExactMatchTags(Set<Tag> personTags, Set<String> keywords) {
         assert keywords != null : "tag keyword set should be non-null";
-        if (personTags.isEmpty()) {
+        if (keywords.isEmpty()) {
             return true;
         }
-        if (keywords.isEmpty()) {
+        if (personTags.isEmpty()) {
             return true;
         }
         return personTags

@@ -1,5 +1,6 @@
 package seedu.address.logic;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,7 +51,10 @@ public class Messages {
                 .append("; Emergency Contact: ")
                 .append(person.getEmergencyContact())
                 .append("; Tags: ");
-        person.getTags().forEach(builder::append);
+        person.getTags().entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()) // sort by TagType enum order
+                .map(e -> "[" + e.getValue().getTagName() + "]")
+                .collect(Collectors.joining());
         return builder.toString();
     }
 

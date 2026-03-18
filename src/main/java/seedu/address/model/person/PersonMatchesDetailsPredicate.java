@@ -1,13 +1,13 @@
 package seedu.address.model.person;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
+import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.FilterDetails;
-import seedu.address.model.tag.Tag;
 
 /**
  * Tests whether a {@code Person} matches the details specified in a {@link FilterDetails}.
@@ -18,19 +18,11 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
 
     /**
      * Creates a {@code PersonMatchesDetailsPredicate} with the given {@code FilterDetails}.
-     * <br>
-     * @param filterDetails person details to be used for matching.
      */
     public PersonMatchesDetailsPredicate(FilterDetails filterDetails) {
         this.filterDetails = Objects.requireNonNull(filterDetails);
     }
 
-    /**
-     * Returns true if the person matches all the details specified in the {@link FilterDetails}.
-     *
-     * @param person the person to be tested against the filter details
-     * @return true if the person matches all the details specified in the filterDetails, false otherwise
-     */
     @Override
     public boolean test(Person person) {
         return isNameMatch(person)
@@ -38,11 +30,10 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
                 & isFuzzyMatch(person.getPhone().value, filterDetails.getPhoneNumberKeywords())
                 & isExactMatch(person.getRoomNumber().value, filterDetails.getRoomNumberKeywords())
                 & isFuzzyMatch(person.getStudentId().value, filterDetails.getStudentIdKeywords())
-                & isFuzzyMatch(person.getEmergencyContact().value,
-                filterDetails.getEmergencyContactKeywords())
-                & isExactMatchTags(person.getYear(), filterDetails.getTagYearKeywords())
-                & isFuzzyMatchTags(person.getMajor(), filterDetails.getTagMajorKeywords())
-                & isExactMatchTags(person.getGender(), filterDetails.getTagGenderKeywords());
+                & isExactMatch(person.getEmergencyContact().value, filterDetails.getEmergencyContactKeywords())
+                & matchesExactTags(person, filterDetails.getTagYearKeywords())
+                & matchesFuzzyTags(person, filterDetails.getTagMajorKeywords())
+                & matchesExactTags(person, filterDetails.getTagGenderKeywords());
     }
 
     /**
@@ -54,81 +45,70 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
             return true;
         }
         List<String> listOfKeywords = filterDetails.getNameKeywords().stream().toList();
-        NameContainsKeywordsPredicate predicate =
-                new NameContainsKeywordsPredicate(listOfKeywords);
+        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(listOfKeywords);
         return predicate.test(person);
     }
 
     /**
-     * Checks if the given {@code personValue} matches any of the {@code keywords} exactly (case-insensitive).
+     * Checks if the given {@code fieldValue} exactly matches any of the {@code keywords} (case-insensitive).
      */
-    private boolean isExactMatch(String personValue, Set<String> keywords) {
+    private boolean isExactMatch(String fieldValue, Set<String> keywords) {
         assert keywords != null : "keywords set should be non-null";
         if (keywords.isEmpty()) {
             return true;
         }
-        if (personValue.isEmpty()) {
+        if (fieldValue.isEmpty()) {
             return false;
         }
-        assert keywords != null : "keywords set should be non-null";
-        return StringUtil.equalsAnyIgnoreCase(personValue, keywords);
+        String lower = fieldValue.toLowerCase(Locale.ROOT);
+        return keywords.stream().map(k -> k.toLowerCase(Locale.ROOT)).anyMatch(lower::equals);
     }
 
     /**
-     * Checks if the given {@code personValue} matches any of the {@code keywords} via fuzzy matching or
-     * substring matching (case-insensitive).
-     * Fuzzy matching allows for minor typos or differences. Substring matching checks if the keyword is
-     * contained within the value.
+     * Checks if the given {@code fieldValue} matches any of the {@code keywords} via substring matching
+     * (case-insensitive).
      */
-    private boolean isFuzzyMatch(String personValue, Set<String> keywords) {
+    private boolean isFuzzyMatch(String fieldValue, Set<String> keywords) {
         assert keywords != null : "keywords set should be non-null";
         if (keywords.isEmpty()) {
             return true;
         }
-        if (personValue.isEmpty()) {
+        if (fieldValue.isEmpty()) {
             return false;
         }
-        return StringUtil.fuzzyMatchesAnyIgnoreCase(personValue, keywords);
+        String lower = fieldValue.toLowerCase(Locale.ROOT);
+        return keywords.stream().map(k -> k.toLowerCase(Locale.ROOT)).anyMatch(lower::contains);
     }
 
     /**
-     * Checks if any of the {@code personTags} match any of the {@code keywords}.
-     * Fuzzy matching allows for minor typos or differences.
-     * Substring matching checks if the keyword is contained within the value.
+     * Checks if any of the person's tags match any of the {@code keywords} via substring matching
+     * (case-insensitive). The keyword must be a substring of the tag name, not the other way around,
+     * to avoid e.g. "cs" matching "statistics".
      */
-    private boolean isFuzzyMatchTags(Set<Tag> personTags, Set<String> keywords) {
+    private boolean matchesFuzzyTags(Person person, Set<String> keywords) {
         assert keywords != null : "tag keyword set should be non-null";
         if (keywords.isEmpty()) {
             return true;
         }
-        if (personTags.isEmpty()) {
-            return false;
-        }
-        return personTags
-                .stream()
-                .map(tag -> tag.getTagName())
-                .anyMatch(tag -> StringUtil.fuzzyMatchesAnyIgnoreCase(tag, keywords));
+        return person.getTags().values().stream().anyMatch(tag -> {
+            String lowerTag = tag.tagName.toLowerCase(Locale.ROOT);
+            return keywords.stream()
+                    .map(k -> k.toLowerCase(Locale.ROOT))
+                    .anyMatch(k -> lowerTag.contains(k) && lowerTag.length() <= k.length() + 3);
+        });
     }
 
     /**
-     * Checks if any of the {@code personTags} exactly match any of the {@code keywords} (case-insensitive).
-     *
-     * @param personTags The set of tags from the person.
-     * @param keywords The set of keywords to match against.
-     * @return True if any tag exactly matches any keyword, false otherwise.
+     * Checks if any of the person's tags exactly match any of the {@code keywords} (case-insensitive).
      */
-    private boolean isExactMatchTags(Set<Tag> personTags, Set<String> keywords) {
+    private boolean matchesExactTags(Person person, Set<String> keywords) {
         assert keywords != null : "tag keyword set should be non-null";
         if (keywords.isEmpty()) {
             return true;
         }
-        if (personTags.isEmpty()) {
-            return false;
-        }
-        return personTags
-                .stream()
-                .map(tag -> tag.getTagName())
-                .anyMatch(tag -> StringUtil.equalsAnyIgnoreCase(tag, keywords));
+        return person.getTags().values().stream()
+                .anyMatch(tag -> keywords.stream()
+                        .anyMatch(keyword -> tag.tagName.equalsIgnoreCase(keyword)));
     }
 
     @Override
@@ -139,14 +119,14 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
         if (!(other instanceof PersonMatchesDetailsPredicate)) {
             return false;
         }
-
         PersonMatchesDetailsPredicate otherPredicate = (PersonMatchesDetailsPredicate) other;
         return Objects.equals(this.filterDetails, otherPredicate.filterDetails);
     }
 
     @Override
     public String toString() {
-        return "Filter Details:"
-                + filterDetails.toString();
+        return new ToStringBuilder(this)
+                .add("filterDetails", filterDetails)
+                .toString();
     }
 }

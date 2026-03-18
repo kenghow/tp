@@ -1,14 +1,12 @@
 package seedu.address.model.person;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Locale;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
+import seedu.address.commons.util.StringUtil;
 import seedu.address.model.FilterDetails;
-import seedu.address.model.tag.Tag;
 
 /**
  * Tests whether a {@code Person} matches the details specified in a {@link FilterDetails}.
@@ -19,8 +17,6 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
 
     /**
      * Creates a {@code PersonMatchesDetailsPredicate} with the given {@code FilterDetails}.
-     * <br>
-     * @param filterDetails person details to be used for matching.
      */
     public PersonMatchesDetailsPredicate(FilterDetails filterDetails) {
         this.filterDetails = Objects.requireNonNull(filterDetails);
@@ -33,21 +29,45 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
                 & isFuzzyMatch(person.getPhone().value, filterDetails.getPhoneNumberKeywords())
                 & isExactMatch(person.getRoomNumber().value, filterDetails.getRoomNumberKeywords())
                 & isFuzzyMatch(person.getStudentId().value, filterDetails.getStudentIdKeywords())
-                & isExactMatch(person.getEmergencyContact().value, filterDetails.getEmergencyContactKeywords())
-                & isExactMatchTags(new HashSet<>(person.getTags().values()), filterDetails.getTagYearKeywords())
-                & isExactMatchTags(new HashSet<>(person.getTags().values()), filterDetails.getTagMajorKeywords())
-                & isExactMatchTags(new HashSet<>(person.getTags().values()), filterDetails.getTagGenderKeywords());
+<<<<<<<<< Temporary merge branch 1
+                & isFuzzyMatch(person.getEmergencyContact().value,
+                filterDetails.getEmergencyContactKeywords())
+                & isExactMatchTags(person.getYear(), filterDetails.getTagYearKeywords())
+                & isFuzzyMatchTags(person.getMajor(), filterDetails.getTagMajorKeywords())
+                & isExactMatchTags(person.getGender(), filterDetails.getTagGenderKeywords());
     }
 
+    /**
+     * Checks if the person's name matches any of the keywords specified in {@code FilterDetails}.
+     * Name matching is done using {@link NameContainsKeywordsPredicate#test(Person)}.
+     */
+=========
+                & isExactMatch(person.getEmergencyContact().value, filterDetails.getEmergencyContactKeywords())
+                & matchesExactTags(person, filterDetails.getTagYearKeywords())
+                & matchesExactTags(person, filterDetails.getTagMajorKeywords())
+                & matchesExactTags(person, filterDetails.getTagGenderKeywords());
+    }
+
+>>>>>>>>> Temporary merge branch 2
     private boolean isNameMatch(Person person) {
         if (filterDetails.getNameKeywords().isEmpty()) {
             return true;
         }
+<<<<<<<<< Temporary merge branch 1
+        List<String> listOfKeywords = filterDetails.getNameKeywords().stream().toList();
+=========
+>>>>>>>>> Temporary merge branch 2
         NameContainsKeywordsPredicate predicate =
-                new NameContainsKeywordsPredicate(new ArrayList<>(filterDetails.getNameKeywords()));
+                new NameContainsKeywordsPredicate(listOfKeywords);
         return predicate.test(person);
     }
 
+<<<<<<<<< Temporary merge branch 1
+    /**
+     * Checks if the given {@code personValue} matches any of the {@code keywords} exactly (case-insensitive).
+     */
+    private boolean isExactMatch(String personValue, Set<String> keywords) {
+=========
     private boolean isExactMatch(String fieldValue, Set<String> keywords) {
         assert keywords != null : "keywords set should be non-null";
         if (keywords.isEmpty()) {
@@ -60,6 +80,10 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
         return keywords.stream().map(k -> k.toLowerCase(Locale.ROOT)).anyMatch(lower::equals);
     }
 
+    /**
+     * Checks if the given {@code fieldValue} matches any of the {@code keywords} via substring matching
+     * (case-insensitive).
+     */
     private boolean isFuzzyMatch(String fieldValue, Set<String> keywords) {
         assert keywords != null : "keywords set should be non-null";
         if (keywords.isEmpty()) {
@@ -72,6 +96,20 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
         return keywords.stream().map(k -> k.toLowerCase(Locale.ROOT)).anyMatch(lower::contains);
     }
 
+    private boolean matchesFuzzyTags(Person person, Set<String> keywords) {
+        assert keywords != null : "tag keyword set should be non-null";
+        if (keywords.isEmpty()) {
+            return true;
+        }
+        return person.getTags().values().stream().anyMatch(tag -> {
+            String lowerTag = tag.tagName.toLowerCase(Locale.ROOT);
+            return keywords.stream()
+                    .map(k -> k.toLowerCase(Locale.ROOT))
+                    .anyMatch(lowerTag::contains);
+        });
+>>>>>>>>> Temporary merge branch 2
+    }
+
     /**
      * Checks if any of the {@code personTags} match any of the {@code keywords}.
      * Fuzzy matching allows for minor typos or differences.
@@ -81,28 +119,35 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
         assert keywords != null : "tag keyword set should be non-null";
         if (keywords.isEmpty()) {
             return true;
+<<<<<<<<< Temporary merge branch 1
         }
-        return personTags.stream().anyMatch(tag -> {
-            String lowerTag = tag.tagName.toLowerCase(Locale.ROOT);
-            return keywords.stream()
-                    .map(k -> k.toLowerCase(Locale.ROOT))
-                    .anyMatch(lowerTag::contains);
-        });
+        if (personTags.isEmpty()) {
+            return false;
+        }
+        return personTags
+                .stream()
+                .map(tag -> tag.getTagName())
+                .anyMatch(tag -> StringUtil.fuzzyMatchesAnyIgnoreCase(tag, keywords));
     }
 
     /**
-     * Checks if any of the {@code personTags} exactly match any of the {@code keywords} (case-insensitive).
-     *
-     * @param personTags The set of tags from the person.
-     * @param keywords The set of keywords to match against.
-     * @return True if any tag exactly matches any keyword, false otherwise.
+     * Checks if any of the person's tags exactly match any of the {@code keywords} (case-insensitive).
      */
-    private boolean isExactMatchTags(Set<Tag> personTags, Set<String> keywords) {
+    private boolean matchesExactTags(Person person, Set<String> keywords) {
         assert keywords != null : "tag keyword set should be non-null";
         if (keywords.isEmpty()) {
             return true;
         }
-        return personTags.stream()
+        if (personTags.isEmpty()) {
+            return false;
+        }
+        return personTags
+                .stream()
+                .map(tag -> tag.getTagName())
+                .anyMatch(tag -> StringUtil.equalsAnyIgnoreCase(tag, keywords));
+=========
+        }
+        return person.getTags().values().stream()
                 .anyMatch(tag -> keywords.stream()
                         .anyMatch(keyword -> tag.tagName.equalsIgnoreCase(keyword)));
     }
@@ -121,7 +166,8 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
 
     @Override
     public String toString() {
-        return "Filter Details:"
-                + filterDetails.toString();
+        return new ToStringBuilder(this)
+                .add("filterDetails", filterDetails)
+                .toString();
     }
 }

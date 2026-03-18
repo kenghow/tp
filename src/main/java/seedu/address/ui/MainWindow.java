@@ -1,9 +1,13 @@
 package seedu.address.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -14,7 +18,9 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
@@ -24,6 +30,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 public class MainWindow extends UiPart<Stage> {
 
     private static final String FXML = "MainWindow.fxml";
+    private static final String MESSAGE_DELETE_CANCELLED = "Deletion cancelled.";
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
@@ -174,12 +181,48 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
+     * Returns true if the given command text is a valid DeleteCommand.
+     */
+    private boolean isDeleteCommand(String commandText) {
+        try {
+            return new AddressBookParser().parseCommand(commandText) instanceof DeleteCommand;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Shows a confirmation dialog before deleting a resident.
+     */
+    private boolean showDeleteConfirmationDialog() {
+        ButtonType confirmButton = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initOwner(primaryStage);
+        alert.setTitle("Confirm Delete");
+        alert.setHeaderText("Delete resident?");
+        alert.setContentText("Are you sure you want to delete this resident entry?");
+        alert.getButtonTypes().setAll(confirmButton, cancelButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == confirmButton;
+    }
+
+    /**
      * Executes the command and returns the result.
      *
      * @see seedu.address.logic.Logic#execute(String)
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
+            if (isDeleteCommand(commandText) && !showDeleteConfirmationDialog()) {
+                CommandResult cancelResult = new CommandResult(MESSAGE_DELETE_CANCELLED);
+                logger.info("Result: " + cancelResult.getFeedbackToUser());
+                resultDisplay.setFeedbackToUser(cancelResult.getFeedbackToUser());
+                return cancelResult;
+            }
+
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());

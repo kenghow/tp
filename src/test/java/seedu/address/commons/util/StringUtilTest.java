@@ -5,7 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
+import java.util.Set;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class StringUtilTest {
@@ -45,82 +48,129 @@ public class StringUtilTest {
         assertTrue(StringUtil.isNonZeroUnsignedInteger("10"));
     }
 
-
-    //---------------- Tests for containsWordIgnoreCase --------------------------------------
-
-    /*
-     * Invalid equivalence partitions for word: null, empty, multiple words
-     * Invalid equivalence partitions for sentence: null
-     * The four test cases below test one invalid input at a time.
-     */
+    //---------------- Tests for equalsAnyIgnoreCase --------------------------------------
 
     @Test
-    public void containsWordIgnoreCase_nullWord_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> StringUtil.containsWordIgnoreCase("typical sentence", null));
+    public void equalsAnyIgnoreCase_nullOrEmptyInputs_throwsException() {
+        // Null inputs
+        Assertions.assertThrows(NullPointerException.class, () ->
+                StringUtil.equalsAnyIgnoreCase(null, Set.of("abc")));
+        Assertions.assertThrows(NullPointerException.class, () ->
+                StringUtil.equalsAnyIgnoreCase("abc", null));
+
+        // Empty inputs
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                StringUtil.equalsAnyIgnoreCase("", Set.of("abc")));
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                StringUtil.equalsAnyIgnoreCase("abc", Collections.emptySet()));
     }
 
     @Test
-    public void containsWordIgnoreCase_emptyWord_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, "Word parameter cannot be empty", ()
-            -> StringUtil.containsWordIgnoreCase("typical sentence", "  "));
+    public void equalsAnyIgnoreCase_validInputs_correctResult() {
+        Set<String> wordSet = Set.of("Alice", "Bob", "Charlie");
+
+        // Exact match
+        assertTrue(StringUtil.equalsAnyIgnoreCase("Alice", wordSet));
+
+        // Case-insensitive match
+        assertTrue(StringUtil.equalsAnyIgnoreCase("alice", wordSet));
+        assertTrue(StringUtil.equalsAnyIgnoreCase("BOB", wordSet));
+
+        // Whitespace trimmed match
+        assertTrue(StringUtil.equalsAnyIgnoreCase("\n  Charlie  \t", wordSet));
+
+        // No match
+        assertFalse(StringUtil.equalsAnyIgnoreCase("Dave", wordSet));
+        assertFalse(StringUtil.equalsAnyIgnoreCase("Alic", wordSet));
+    }
+
+    //---------------- Tests for fuzzyMatchesIgnoresCase --------------------------------------
+
+    @Test
+    public void fuzzyMatchesIgnoresCase_nullOrEmptyInputs_throwsException() {
+        // Null inputs
+        Assertions.assertThrows(NullPointerException.class, () -> StringUtil.fuzzyMatchesIgnoresCase(null, "abc"));
+        Assertions.assertThrows(NullPointerException.class, () -> StringUtil.fuzzyMatchesIgnoresCase("abc", null));
+
+        // Empty inputs
+        Assertions.assertThrows(IllegalArgumentException.class, () -> StringUtil.fuzzyMatchesIgnoresCase("", "abc"));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> StringUtil.fuzzyMatchesIgnoresCase("abc", ""));
     }
 
     @Test
-    public void containsWordIgnoreCase_multipleWords_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, "Word parameter should be a single word", ()
-            -> StringUtil.containsWordIgnoreCase("typical sentence", "aaa BBB"));
+    public void fuzzyMatchesIgnoresCase_exactMatches_returnsTrue() {
+        // Exact match
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("abc", "abc"));
+
+        // Exact match, case-insensitive
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("abc", "ABC"));
     }
 
     @Test
-    public void containsWordIgnoreCase_nullSentence_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> StringUtil.containsWordIgnoreCase(null, "abc"));
+    public void fuzzyMatchesIgnoresCase_substringMatches_returnsTrue() {
+        // query is substring of target
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("bcd", "abcde"));
+
+        // query is substring of target - case-insensitive
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("BcD", "abcde"));
     }
 
-    /*
-     * Valid equivalence partitions for word:
-     *   - any word
-     *   - word containing symbols/numbers
-     *   - word with leading/trailing spaces
-     *
-     * Valid equivalence partitions for sentence:
-     *   - empty string
-     *   - one word
-     *   - multiple words
-     *   - sentence with extra spaces
-     *
-     * Possible scenarios returning true:
-     *   - matches first word in sentence
-     *   - last word in sentence
-     *   - middle word in sentence
-     *   - matches multiple words
-     *
-     * Possible scenarios returning false:
-     *   - query word matches part of a sentence word
-     *   - sentence word matches part of the query word
-     *
-     * The test method below tries to verify all above with a reasonably low number of test cases.
-     */
+    @Test
+    public void fuzzyMatchesIgnoresCase_shortStringsWithDifferences_returnsFalse() {
+        // query is too short to be considered for fuzzy matching
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("ab", "abc"));
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("ab", "abcd"));
+
+        // both target and query are too short to be considered for fuzzy matching
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("a", "ab"));
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("ab", "ac"));
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("a", "b"));
+    }
 
     @Test
-    public void containsWordIgnoreCase_validInputs_correctResult() {
+    public void fuzzyMatchesIgnoresCase_withinDistance_returnsTrue() {
+        // Distance 1
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("kitten", "sitten"));
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("kitten", "kittn"));
 
-        // Empty sentence
-        assertFalse(StringUtil.containsWordIgnoreCase("", "abc")); // Boundary case
-        assertFalse(StringUtil.containsWordIgnoreCase("    ", "123"));
+        // Distance 2
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("kitten", "kitti"));
+        assertTrue(StringUtil.fuzzyMatchesIgnoresCase("example", "exmpl"));
+    }
 
-        // Matches a partial word only
-        assertFalse(StringUtil.containsWordIgnoreCase("aaa bbb ccc", "bb")); // Sentence word bigger than query word
-        assertFalse(StringUtil.containsWordIgnoreCase("aaa bbb ccc", "bbbb")); // Query word bigger than sentence word
+    @Test
+    public void fuzzyMatchesIgnoresCase_exceedDistance_returnsFalse() {
+        // Distance > 2
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("kitten", "kitchren"));
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("hello", "olleh"));
 
-        // Matches word in the sentence, different upper/lower case letters
-        assertTrue(StringUtil.containsWordIgnoreCase("aaa bBb ccc", "Bbb")); // First word (boundary case)
-        assertTrue(StringUtil.containsWordIgnoreCase("aaa bBb ccc@1", "CCc@1")); // Last word (boundary case)
-        assertTrue(StringUtil.containsWordIgnoreCase("  AAA   bBb   ccc  ", "aaa")); // Sentence has extra spaces
-        assertTrue(StringUtil.containsWordIgnoreCase("Aaa", "aaa")); // Only one word in sentence (boundary case)
-        assertTrue(StringUtil.containsWordIgnoreCase("aaa bbb ccc", "  ccc  ")); // Leading/trailing spaces
+        // Not substring and distance > 2
+        assertFalse(StringUtil.fuzzyMatchesIgnoresCase("abc", "xyz"));
+    }
 
-        // Matches multiple words in sentence
-        assertTrue(StringUtil.containsWordIgnoreCase("AAA bBb ccc  bbb", "bbB"));
+    //---------------- Tests for fuzzyMatchesAnyIgnoreCase --------------------------------------
+
+    @Test
+    public void fuzzyMatchesAnyIgnoreCase_validInputs_correctResult() {
+        Set<String> wordSet = Set.of("kitten", "puppy", "Constitution");
+
+        // Exact match
+        assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("kitten", wordSet));
+
+        // Fuzzy match (1 edit)
+        assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("sitten", wordSet));
+
+        // Fuzzy match (2 edits)
+        assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("kitti", wordSet));
+
+        // Substring match
+        assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("unconstitutional", wordSet));
+
+        // No match (too different and not substring)
+        assertFalse(StringUtil.fuzzyMatchesAnyIgnoreCase("dragon", wordSet));
+
+        // Distance match with different case
+        assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("kiTTens", wordSet));
     }
 
     //---------------- Tests for getDetails --------------------------------------
@@ -139,5 +189,4 @@ public class StringUtilTest {
     public void getDetails_nullGiven_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> StringUtil.getDetails(null));
     }
-
 }

@@ -1,7 +1,6 @@
 package seedu.address.testutil;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Email;
@@ -39,7 +38,7 @@ public class EditPersonDescriptorBuilder {
         descriptor.setEmail(person.getEmail());
         descriptor.setStudentId(person.getStudentId());
         descriptor.setRoomNumber(person.getRoomNumber());
-        descriptor.setTags(person.getTags());
+        descriptor.setTags(new HashMap<>(person.getTags()));
     }
 
     /**
@@ -101,13 +100,13 @@ public class EditPersonDescriptorBuilder {
      * that we are building.
      */
     public EditPersonDescriptorBuilder withTags(Object[]... tags) {
-        Set<Tag> tagSet = new HashSet<>();
-        for (Object[] pair: tags) {
+        HashMap<TagType, Tag> tagMap = new HashMap<>();
+        for (Object[] pair : tags) {
             TagType type = TagType.valueOf(pair[0].toString());
             String tagName = pair[1].toString();
-            tagSet.add(new Tag(type, tagName));
+            tagMap.put(type, new Tag(type, tagName));
         }
-        descriptor.setTags(tagSet);
+        descriptor.setTags(tagMap);
         return this;
     }
 

@@ -13,14 +13,16 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.EmergencyContact;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.RoomNumber;
 import seedu.address.model.person.StudentId;
 
 public class JsonAdaptedPersonTest {
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_PHONE = "651234";
-    private static final String INVALID_ADDRESS = " ";
+    private static final String INVALID_STUDENTID = "A1234";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_ROOM_NUMBER = " ";
     private static final String INVALID_EMERGENCY_CONTACT = "911a";
@@ -32,7 +34,7 @@ public class JsonAdaptedPersonTest {
     private static final String VALID_STUDENTID = BENSON.getStudentId().toString();
     private static final String VALID_ROOM_NUMBER = BENSON.getRoomNumber().toString();
     private static final String VALID_EMERGENCY_CONTACT = BENSON.getEmergencyContact().toString();
-    private static final List<JsonAdaptedTag> VALID_TAGS = BENSON.getTags().stream()
+    private static final List<JsonAdaptedTag> VALID_TAGS = BENSON.getTags().values().stream()
             .map(JsonAdaptedTag::new)
             .collect(Collectors.toList());
 
@@ -94,19 +96,53 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_invalidAddress_throwsIllegalValueException() {
+    public void toModelType_invalidStudentId_throwsIllegalValueException() {
         JsonAdaptedPerson person =
-                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, INVALID_ADDRESS,
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, INVALID_STUDENTID,
                         VALID_ROOM_NUMBER, VALID_EMERGENCY_CONTACT, VALID_TAGS);
         String expectedMessage = StudentId.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 
     @Test
-    public void toModelType_nullAddress_throwsIllegalValueException() {
+    public void toModelType_nullStudentId_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, null,
                 VALID_ROOM_NUMBER, VALID_EMERGENCY_CONTACT, VALID_TAGS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, StudentId.class.getSimpleName());
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidRoomNumber_throwsIllegalValueException() {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_STUDENTID,
+                        INVALID_ROOM_NUMBER, VALID_EMERGENCY_CONTACT, VALID_TAGS);
+        String expectedMessage = RoomNumber.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullRoomNumber_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_STUDENTID,
+                null, VALID_EMERGENCY_CONTACT, VALID_TAGS);
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, RoomNumber.class.getSimpleName());
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_invalidEmergencyContact_throwsIllegalValueException() {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_STUDENTID,
+                        VALID_ROOM_NUMBER, INVALID_EMERGENCY_CONTACT, VALID_TAGS);
+        String expectedMessage = EmergencyContact.MESSAGE_CONSTRAINTS;
+        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_nullEmergencyContact_throwsIllegalValueException() {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_STUDENTID,
+                VALID_ROOM_NUMBER, null, VALID_TAGS);
+        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, EmergencyContact.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 

@@ -1,9 +1,8 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -18,6 +17,7 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.person.RoomNumber;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.TagType;
 
 /**
  * Jackson-friendly version of {@link Person}.
@@ -63,7 +63,7 @@ class JsonAdaptedPerson {
         studentId = source.getStudentId().value;
         roomNumber = source.getRoomNumber() != null ? source.getRoomNumber().value : null;
         emergencyContact = source.getEmergencyContact() != null ? source.getEmergencyContact().value : null;
-        tags.addAll(source.getTags().stream()
+        tags.addAll(source.getTags().values().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
     }
@@ -112,21 +112,32 @@ class JsonAdaptedPerson {
         }
         final StudentId modelStudentId = new StudentId(studentId);
 
-        if (roomNumber != null && !RoomNumber.isValidRoomNumber(roomNumber)) {
+        if (roomNumber == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    RoomNumber.class.getSimpleName()));
+        }
+
+        if (!RoomNumber.isValidRoomNumber(roomNumber)) {
             throw new IllegalValueException(RoomNumber.MESSAGE_CONSTRAINTS);
         }
-        final RoomNumber modelRoomNumber = roomNumber != null
-                                         ? new RoomNumber(roomNumber)
-                                         : null;
+        final RoomNumber modelRoomNumber = new RoomNumber(roomNumber);
 
-        if (emergencyContact != null && !EmergencyContact.isValidEmergencyContact(emergencyContact)) {
+        if (emergencyContact == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    EmergencyContact.class.getSimpleName()));
+        }
+
+        if (!EmergencyContact.isValidEmergencyContact(emergencyContact)) {
             throw new IllegalValueException(EmergencyContact.MESSAGE_CONSTRAINTS);
         }
         final EmergencyContact modelEmergencyContact = emergencyContact != null
                                                      ? new EmergencyContact(emergencyContact)
                                                      : null;
 
-        final Set<Tag> modelTags = new HashSet<>(personTags);
+        final HashMap<TagType, Tag> modelTags = new HashMap<>();
+        for (Tag tag: personTags) {
+            modelTags.put(tag.getTagType(), tag);
+        }
         return new Person(modelName, modelPhone, modelEmail, modelStudentId, modelRoomNumber,
                 modelEmergencyContact, modelTags);
     }

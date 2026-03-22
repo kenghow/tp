@@ -200,20 +200,26 @@ public class EditCommandParserTest {
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
 
         // multiple valid non-student-ID fields repeated
-        userInput = STUDENTID_DESC_AMY + PHONE_DESC_AMY + STUDENTID_DESC_AMY + EMAIL_DESC_AMY
-                + TAG_DESC_YEAR + PHONE_DESC_AMY + STUDENTID_DESC_AMY
+        userInput = STUDENTID_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                + TAG_DESC_YEAR + PHONE_DESC_AMY
                 + PHONE_DESC_BOB + STUDENTID_DESC_BOB + EMAIL_DESC_BOB + EMERGENCY_CONTACT_DESC_AMY;
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL));
 
         // multiple invalid non-student-ID fields repeated
-        userInput = STUDENTID_DESC_AMY + INVALID_PHONE_DESC + INVALID_STUDENTID_DESC + INVALID_EMAIL_DESC
-                + INVALID_PHONE_DESC + INVALID_STUDENTID_DESC + INVALID_EMAIL_DESC;
+        userInput = STUDENTID_DESC_AMY + INVALID_PHONE_DESC + INVALID_EMAIL_DESC
+                + INVALID_PHONE_DESC + INVALID_EMAIL_DESC;
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE, PREFIX_EMAIL));
 
         // more than two student-ID fields repeated
         userInput = STUDENTID_DESC_AMY + STUDENTID_DESC_BOB + STUDENTID_DESC_AMY;
         assertParseFailure(parser, userInput, Messages.getErrorMessageForDuplicatePrefixes(PREFIX_STUDENT_ID));
+
+        // more than two student-ID fields repeated, and multiple non-ID fields repeated
+        // -> only student-ID duplicate error is captured
+        userInput = STUDENTID_DESC_AMY + STUDENTID_DESC_BOB + STUDENTID_DESC_AMY + PHONE_DESC_AMY + PHONE_DESC_BOB;
+        assertParseFailure(parser, userInput,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_STUDENT_ID));
     }
 }

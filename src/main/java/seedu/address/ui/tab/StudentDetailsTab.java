@@ -24,9 +24,6 @@ public class StudentDetailsTab extends UiPart<Region> {
     private StackPane profilePlaceholder;
 
     @FXML
-    private StackPane ccaRecordsPlaceholder;
-
-    @FXML
     private StackPane demeritRecordsPlaceholder;
 
     /**

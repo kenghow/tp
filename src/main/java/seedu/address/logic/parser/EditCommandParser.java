@@ -50,8 +50,13 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_STUDENT_ID,
+
+        // Check for duplicate prefixes
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                 PREFIX_ROOM_NUMBER, PREFIX_EMERGENCY_CONTACT);
+
+        // However, it is possible for the user to specify the student ID prefix two times
+        argMultimap.verifyNoMoreThanTwoPrefixesFor(PREFIX_STUDENT_ID);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -64,8 +69,10 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
-        if (argMultimap.getValue(PREFIX_STUDENT_ID).isPresent()) {
-            editPersonDescriptor.setStudentId(ParserUtil.parseStudentId(argMultimap.getValue(PREFIX_STUDENT_ID).get()));
+        if (argMultimap.getAllValues(PREFIX_STUDENT_ID).size() == 2) {
+            // If there are two student ID prefixes, the second one is the edited student ID
+            StudentId editedStudentId = ParserUtil.parseStudentId(argMultimap.getAllValues(PREFIX_STUDENT_ID).get(1));
+            editPersonDescriptor.setStudentId(editedStudentId);
         }
         if (argMultimap.getValue(PREFIX_ROOM_NUMBER).isPresent()) {
             editPersonDescriptor.setRoomNumber(ParserUtil.parseRoomNumber(argMultimap

@@ -113,7 +113,7 @@ public class EditCommand extends Command {
         Map<TagType, Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedStudentId, updatedRoomNumber,
-                updatedEmergencyContact, updatedTags);
+                updatedEmergencyContact, updatedTags, personToEdit.getDemeritIncidents());
     }
 
     @Override

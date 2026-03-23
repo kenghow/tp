@@ -92,19 +92,15 @@ public class FilterPanel extends UiPart<Region> {
      */
     @FXML
     private void handleNameFieldEntered() {
-        // Clear existing tags
-        nameTags.getChildren().clear();
-
         // Get the input text and split it into keywords
         String nameFilterText = nameFilterField.getText();
         if (nameFilterText.trim().isEmpty()) {
             return;
         }
         Set<String> nameFilterKeywordsSet = StringUtil.splitSentenceIntoWords(nameFilterText);
-        nameFilterKeywordsSet.forEach(tag -> nameTags.getChildren().add(new Label(tag)));
 
-        // Create a new FilterDetails with updated name keywords
-        FilterDetails newFilterDetails = filterDetails.getFilterDetails().get();
+        // Copy current filters first so updating name does not reset the other criteria.
+        FilterDetails newFilterDetails = new FilterDetails(filterDetails);
         newFilterDetails.setNameKeywords(nameFilterKeywordsSet);
 
         try {

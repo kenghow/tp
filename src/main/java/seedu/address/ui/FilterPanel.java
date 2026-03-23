@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
+import javafx.collections.SetChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -70,7 +71,8 @@ public class FilterPanel extends UiPart<Region> {
     */
     private void fillInnerParts() {
         // Keep name tags synchronized with the observable keyword set.
-        filterDetails.getNameKeywords().addListener(change -> renderNameKeywordTags(filterDetails));
+        filterDetails.getNameKeywords()
+                .addListener((SetChangeListener<? super String>) change -> renderNameKeywordTags(filterDetails));
         renderNameKeywordTags(filterDetails);
 
         // TODO: Remove UI mockup entirely once we're ready

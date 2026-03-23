@@ -6,7 +6,7 @@
 
 # Hall Ledger User Guide
 
-Hall Ledger (HL) is a desktop application that helps Resident Assistants (RAs) efficiently manage residents in NUS halls. It is optimised for users who prefer typing commands, while still offering an intuitive visual interface for viewing resident data at a glance.
+**Hall Ledger (HL)** is a desktop application that helps **Resident Assistants (RAs) efficiently manage residents in NUS halls**. It is optimised for users who prefer typing commands, while still offering an intuitive visual interface for viewing resident data at a glance.
 
 <!-- * Table of Contents -->
 <page-nav-print />

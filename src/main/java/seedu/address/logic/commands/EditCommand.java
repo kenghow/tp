@@ -22,13 +22,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Email;
-import seedu.address.model.person.EmergencyContact;
-import seedu.address.model.person.Name;
-import seedu.address.model.person.Person;
-import seedu.address.model.person.Phone;
-import seedu.address.model.person.RoomNumber;
-import seedu.address.model.person.StudentId;
+import seedu.address.model.person.*;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagType;
 
@@ -110,10 +104,11 @@ public class EditCommand extends Command {
         RoomNumber updatedRoomNumber = editPersonDescriptor.getRoomNumber().orElse(personToEdit.getRoomNumber());
         EmergencyContact updatedEmergencyContact = editPersonDescriptor.getEmergencyContact()
                         .orElse(personToEdit.getEmergencyContact());
-        Map<TagType, Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        Remark remark = personToEdit.getRemark();
+        Map<TagType, Tag> updatedTags = personToEdit.getTags();
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedStudentId, updatedRoomNumber,
-                updatedEmergencyContact, updatedTags);
+                updatedEmergencyContact, remark, updatedTags);
     }
 
     @Override

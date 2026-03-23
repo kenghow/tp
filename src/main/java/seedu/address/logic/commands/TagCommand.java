@@ -89,6 +89,7 @@ public class TagCommand extends Command {
                 personToTag.getStudentId(),
                 personToTag.getRoomNumber(),
                 personToTag.getEmergencyContact(),
+                personToTag.getRemark(),
                 updatedTags
         );
 

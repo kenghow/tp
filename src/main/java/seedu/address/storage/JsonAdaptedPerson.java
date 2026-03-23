@@ -135,7 +135,7 @@ class JsonAdaptedPerson {
         }
 
         final EmergencyContact modelEmergencyContact = new EmergencyContact(emergencyContact);
-      
+
         Remark modelRemark = new Remark("");
         if (remark != null) {
             modelRemark = new Remark(remark);

@@ -23,9 +23,7 @@
                <HBox>
                   <children>
                      <Label minWidth="57.0" styleClass="label-small" text="Keywords:" />
-                     <FlowPane fx:id="nameTagsFlowPane" styleClass="filter-panel-flow-pane"
-                               rowValignment="TOP"
-                               HBox.hgrow="ALWAYS">
+                     <FlowPane fx:id="nameTagsFlowPane" rowValignment="TOP" styleClass="filter-panel-flow-pane" HBox.hgrow="ALWAYS">
                         <HBox.margin>
                            <Insets left="3.0" />
                         </HBox.margin>
@@ -75,20 +73,15 @@
 
                 <GridPane hgap="20.0" vgap="15.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.333" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.333" />
-                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="33.333" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" percentWidth="50.0" />
                     </columnConstraints>
                     <children>
-                        <VBox spacing="5.0" GridPane.columnIndex="0">
-                            <Label styleClass="label-bright" text="Floor" />
-                            <ComboBox fx:id="floorFilterComboBox" maxWidth="Infinity" />
-                        </VBox>
-                        <VBox spacing="5.0" GridPane.columnIndex="1">
+                        <VBox spacing="5.0" GridPane.hgrow="ALWAYS">
                             <Label styleClass="label-bright" text="Year" />
                             <ComboBox fx:id="yearFilterComboBox" maxWidth="Infinity" />
                         </VBox>
-                        <VBox spacing="5.0" GridPane.columnIndex="2">
+                        <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS">
                             <Label styleClass="label-bright" text="Gender" />
                             <ComboBox fx:id="genderFilterComboBox" maxWidth="Infinity" />
                         </VBox>

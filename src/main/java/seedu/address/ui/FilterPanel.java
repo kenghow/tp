@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
+import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.model.FilterDetails;
 
@@ -20,6 +22,7 @@ import seedu.address.model.FilterDetails;
 public class FilterPanel extends UiPart<Region> {
     private static final String FXML = "FilterPanel.fxml";
     private final ObjectProperty<FilterDetails> filterDetails;
+    private final FilterExecutor filterExecutor;
 
     @FXML
     private TextField nameFilterField;
@@ -55,9 +58,10 @@ public class FilterPanel extends UiPart<Region> {
     /**
      * Creates a {@code FilterPanel} with the given {@code ObjectProperty<FilterDetails>}.
      */
-    public FilterPanel(ObjectProperty<FilterDetails> filterDetails) {
+    public FilterPanel(ObjectProperty<FilterDetails> filterDetails, FilterExecutor filterExecutor) {
         super(FXML);
         this.filterDetails = filterDetails;
+        this.filterExecutor = filterExecutor;
         fillInnerParts();
     }
 
@@ -102,9 +106,20 @@ public class FilterPanel extends UiPart<Region> {
         FilterDetails newFilterDetails = new FilterDetails(filterDetails.get());
         newFilterDetails.setNameKeywords(nameFilterKeywordsSet);
 
-        // Trigger the listener in ModelManager
-        filterDetails.set(newFilterDetails);
+        try {
+            filterExecutor.execute(newFilterDetails);
+        } catch (CommandException e) {
+            // No-op: MainWindow owns feedback rendering for filter execution failures.
+        }
 
         nameFilterField.clear();
+    }
+
+    /**
+     * Represents a function that can apply filters and return a command-like result.
+     */
+    @FunctionalInterface
+    public interface FilterExecutor {
+        CommandResult execute(FilterDetails filterDetails) throws CommandException;
     }
 }

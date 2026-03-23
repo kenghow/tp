@@ -47,9 +47,9 @@ public class FilterDetails implements ReadOnlyFilterDetails {
     // ==================== Setters ======================
 
     /**
-     * Sets the details of this {@code FilterDetails} to be the same as the given {@code FilterDetails}.
+     * Sets the details of this {@code FilterDetails} to be the same as the given {@code ReadOnlyFilterDetails}.
      *
-     * @param other the {@code FilterDetails} to copy the details from
+     * @param other the {@code ReadOnlyFilterDetails} to copy the details from
      */
     public void set(ReadOnlyFilterDetails other) {
         requireNonNull(other);
@@ -64,73 +64,75 @@ public class FilterDetails implements ReadOnlyFilterDetails {
         replaceAll(tagGenderKeywords, other.getTagGenderKeywords());
     }
 
-    // ==================== Getters (return observables) ======================
+    // ==================== Getters ======================
     public ObservableSet<String> getNameKeywords() {
         return nameKeywords;
-    }
-
-    public void setNameKeywords(Set<String> nameKeywords) {
-        replaceAll(this.nameKeywords, nameKeywords);
     }
 
     public ObservableSet<String> getEmailKeywords() {
         return emailKeywords;
     }
 
-    public void setEmailKeywords(Set<String> emailKeywords) {
-        replaceAll(this.emailKeywords, emailKeywords);
-    }
-
     public ObservableSet<String> getPhoneNumberKeywords() {
         return phoneNumberKeywords;
-    }
-
-    public void setPhoneNumberKeywords(Set<String> phoneNumberKeywords) {
-        replaceAll(this.phoneNumberKeywords, phoneNumberKeywords);
     }
 
     public ObservableSet<String> getRoomNumberKeywords() {
         return roomNumberKeywords;
     }
 
-    public void setRoomNumberKeywords(Set<String> roomNumberKeywords) {
-        replaceAll(this.roomNumberKeywords, roomNumberKeywords);
-    }
-
     public ObservableSet<String> getStudentIdKeywords() {
         return studentIdKeywords;
-    }
-
-    public void setStudentIdKeywords(Set<String> studentIdKeywords) {
-        replaceAll(this.studentIdKeywords, studentIdKeywords);
     }
 
     public ObservableSet<String> getEmergencyContactKeywords() {
         return emergencyContactKeywords;
     }
 
-    public void setEmergencyContactKeywords(Set<String> emergencyContactKeywords) {
-        replaceAll(this.emergencyContactKeywords, emergencyContactKeywords);
-    }
-
     public ObservableSet<String> getTagYearKeywords() {
         return tagYearKeywords;
-    }
-
-    public void setTagYearKeywords(Set<String> tagYearKeywords) {
-        replaceAll(this.tagYearKeywords, tagYearKeywords);
     }
 
     public ObservableSet<String> getTagMajorKeywords() {
         return tagMajorKeywords;
     }
 
-    public void setTagMajorKeywords(Set<String> tagMajorKeywords) {
-        replaceAll(this.tagMajorKeywords, tagMajorKeywords);
-    }
-
     public ObservableSet<String> getTagGenderKeywords() {
         return tagGenderKeywords;
+    }
+
+    // ==================== Setters ======================
+
+    public void setNameKeywords(Set<String> nameKeywords) {
+        replaceAll(this.nameKeywords, nameKeywords);
+    }
+
+    public void setEmailKeywords(Set<String> emailKeywords) {
+        replaceAll(this.emailKeywords, emailKeywords);
+    }
+
+    public void setPhoneNumberKeywords(Set<String> phoneNumberKeywords) {
+        replaceAll(this.phoneNumberKeywords, phoneNumberKeywords);
+    }
+
+    public void setRoomNumberKeywords(Set<String> roomNumberKeywords) {
+        replaceAll(this.roomNumberKeywords, roomNumberKeywords);
+    }
+
+    public void setStudentIdKeywords(Set<String> studentIdKeywords) {
+        replaceAll(this.studentIdKeywords, studentIdKeywords);
+    }
+
+    public void setEmergencyContactKeywords(Set<String> emergencyContactKeywords) {
+        replaceAll(this.emergencyContactKeywords, emergencyContactKeywords);
+    }
+
+    public void setTagYearKeywords(Set<String> tagYearKeywords) {
+        replaceAll(this.tagYearKeywords, tagYearKeywords);
+    }
+
+    public void setTagMajorKeywords(Set<String> tagMajorKeywords) {
+        replaceAll(this.tagMajorKeywords, tagMajorKeywords);
     }
 
     public void setTagGenderKeywords(Set<String> tagGenderKeywords) {

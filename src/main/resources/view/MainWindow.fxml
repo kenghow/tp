@@ -20,6 +20,7 @@
     <Scene>
       <stylesheets>
         <URL value="@DarkTheme.css" />
+        <URL value="@Extensions.css" />
       </stylesheets>
 
       <VBox maxHeight="1.7976931348623157E308" styleClass="stack-pane">

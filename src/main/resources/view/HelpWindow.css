@@ -33,3 +33,16 @@
     -fx-text-fill: #d9d9d9;
     -fx-font-size: 11px;
 }
+
+#link {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-padding: 0px 0 0px 0;
+    -fx-underline: true;
+    /* Optional: Change cursor on hover to indicate it's a link */
+    -fx-cursor: hand;
+}
+
+#link:hover {
+    -fx-underline: true;
+}

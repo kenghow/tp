@@ -5,6 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import seedu.address.ui.UiPart;
 
+/**
+ * A UI component that displays a tag in the filter panel.
+ */
 public class FilterPanelTag extends UiPart<Region> {
     private static final String FXML = "FilterPanelTag.fxml";
 

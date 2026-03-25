@@ -132,7 +132,7 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
+        return new ToStringBuilder("")
                 .add("filterDetails", filterDetails)
                 .toString();
     }

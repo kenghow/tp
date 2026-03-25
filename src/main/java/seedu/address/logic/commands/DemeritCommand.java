@@ -91,6 +91,7 @@ public class DemeritCommand extends Command {
                 personToUpdate.getStudentId(),
                 personToUpdate.getRoomNumber(),
                 personToUpdate.getEmergencyContact(),
+                personToUpdate.getRemark(),
                 personToUpdate.getTags(),
                 updatedIncidents
         );

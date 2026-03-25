@@ -10,8 +10,8 @@
    <children>
       <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
          <children>
-             <Label fx:id="label" maxWidth="340.0"
-                    text="This is a very very very very very very very very very very very very very long"
+             <Label fx:id="label" maxWidth="300.0"
+                    text="Label"
                     textOverrun="CENTER_ELLIPSIS"/>
          </children>
       </VBox>

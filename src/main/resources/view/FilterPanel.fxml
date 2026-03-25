@@ -2,18 +2,14 @@
 
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<TitledPane xmlns:fx="http://javafx.com/fxml/1" animated="true" minWidth="320.0" styleClass="filter-pane"
-            stylesheets="@DarkTheme.css"
+<TitledPane xmlns:fx="http://javafx.com/fxml/1" animated="true" minWidth="320.0" styleClass="filter-pane" stylesheets="@DarkTheme.css"
             text="Filter" xmlns="http://javafx.com/javafx/17.0.12">
     <graphic>
         <FontIcon iconLiteral="dashicons-filter" iconSize="16" styleClass="filter-icon"/>
@@ -45,7 +41,8 @@
                     <StackPane fx:id="roomNumberFilterFieldPlaceholder" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
                     <StackPane fx:id="majorFilterFieldPlaceholder" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
-                    <StackPane fx:id="emergencyContactFilterFieldPlaceholder" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    <StackPane fx:id="emergencyContactFilterFieldPlaceholder" GridPane.columnIndex="1"
+                               GridPane.rowIndex="2"/>
                 </GridPane>
 
                 <GridPane hgap="20.0" vgap="15.0">

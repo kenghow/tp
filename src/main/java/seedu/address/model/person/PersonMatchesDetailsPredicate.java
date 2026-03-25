@@ -32,14 +32,14 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
     @Override
     public boolean test(Person person) {
         return isNameMatch(person)
-                & isFuzzyMatch(person.getEmail().value, filterDetails.getEmailKeywords())
-                & isFuzzyMatch(person.getPhone().value, filterDetails.getPhoneNumberKeywords())
-                & isFuzzyMatch(person.getRoomNumber().value, filterDetails.getRoomNumberKeywords())
-                & isFuzzyMatch(person.getStudentId().value, filterDetails.getStudentIdKeywords())
-                & isFuzzyMatch(person.getEmergencyContact().value, filterDetails.getEmergencyContactKeywords())
-                & matchesFuzzyTags(person, filterDetails.getTagYearKeywords())
-                & matchesFuzzyTags(person, filterDetails.getTagMajorKeywords())
-                & matchesExactTags(person, filterDetails.getTagGenderKeywords());
+                && isFuzzyMatch(person.getEmail().value, filterDetails.getEmailKeywords())
+                && isFuzzyMatch(person.getPhone().value, filterDetails.getPhoneNumberKeywords())
+                && isFuzzyMatch(person.getRoomNumber().value, filterDetails.getRoomNumberKeywords())
+                && isFuzzyMatch(person.getStudentId().value, filterDetails.getStudentIdKeywords())
+                && isFuzzyMatch(person.getEmergencyContact().value, filterDetails.getEmergencyContactKeywords())
+                && matchesFuzzyTags(person, filterDetails.getTagYearKeywords())
+                && matchesFuzzyTags(person, filterDetails.getTagMajorKeywords())
+                && matchesExactTags(person, filterDetails.getTagGenderKeywords());
     }
 
     /**

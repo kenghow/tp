@@ -54,9 +54,9 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_moreThan20ValuesForSinglePrefix_throwsParseException() {
+    public void parse_moreThan10ValuesForSinglePrefix_throwsParseException() {
         StringBuilder userInput = new StringBuilder();
-        for (int index = 1; index <= 21; index++) {
+        for (int index = 1; index <= 11; index++) {
             userInput.append(" n=Name").append(index);
         }
 
@@ -66,7 +66,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_exactly20ValuesForSinglePrefix_success() {
+    public void parse_exactly10ValuesForSinglePrefix_success() {
         StringBuilder userInput = new StringBuilder();
         for (int index = 1; index <= 10; index++) {
             userInput.append(" n=Name").append(index);

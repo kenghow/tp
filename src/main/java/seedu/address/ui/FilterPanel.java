@@ -4,26 +4,22 @@ import java.util.Set;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import javafx.collections.SetChangeListener;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import seedu.address.commons.util.StringUtil;
-import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.FilterDetails;
-import seedu.address.model.ReadOnlyFilterDetails;
-import seedu.address.ui.executors.FilterExecutor;
+import seedu.address.ui.filter.FilterPanelTag;
 
 /**
  * Panel containing the list of filtering and sorting options.
  */
 public class FilterPanel extends UiPart<Region> {
     private static final String FXML = "FilterPanel.fxml";
-    private final ReadOnlyFilterDetails filterDetails;
-    private final FilterExecutor filterExecutor;
+    private final ObjectProperty<FilterDetails> filterDetails;
 
     @FXML
     private TextField nameFilterField;
@@ -57,12 +53,11 @@ public class FilterPanel extends UiPart<Region> {
     private FontIcon sortIcon;
 
     /**
-     * Creates a {@code FilterPanel} with the given {@code ReadOnlyFilterDetails}.
+     * Creates a {@code FilterPanel} with the given {@code ObjectProperty<FilterDetails>}.
      */
-    public FilterPanel(ReadOnlyFilterDetails filterDetails, FilterExecutor filterExecutor) {
+    public FilterPanel(ObjectProperty<FilterDetails> filterDetails) {
         super(FXML);
         this.filterDetails = filterDetails;
-        this.filterExecutor = filterExecutor;
         fillInnerParts();
     }
 
@@ -70,64 +65,30 @@ public class FilterPanel extends UiPart<Region> {
     * Fills the inner parts of the FilterPanel, such as setting up event handlers for the filter fields and
     */
     private void fillInnerParts() {
-        // Keep name tags synchronized with the observable keyword set.
-        filterDetails.getNameKeywords()
-                .addListener((SetChangeListener<? super String>) change -> renderNameKeywordTags(filterDetails));
-        renderNameKeywordTags(filterDetails);
-
-        // TODO: Remove UI mockup entirely once we're ready
-        // Initialize dummy values for ComboBoxes for UI demonstration
-        floorFilterComboBox.getItems().addAll("Any", "1", "2", "3", "4", "5");
-        floorFilterComboBox.getSelectionModel().selectFirst();
-
-        yearFilterComboBox.getItems().addAll("Any", "1", "2", "3", "4", "5+");
-        yearFilterComboBox.getSelectionModel().selectFirst();
-
-        genderFilterComboBox.getItems().addAll("Any", "Male", "Female");
-        genderFilterComboBox.getSelectionModel().selectFirst();
-
-        sortByComboBox.getItems().addAll("None", "Name", "Phone", "Email", "Student ID", "Room number", "Major",
-                "Emergency Contact", "Floor", "Year", "Gender");
-        sortByComboBox.getSelectionModel().selectFirst();
-
-        sortOrderComboBox.getItems().addAll("Ascending", "Descending");
-        sortOrderComboBox.getSelectionModel().selectFirst();
     }
-
-
-    // TODO: Refactor this method to be more generic and reusable for other filter fields in the future.
-    // Currently, this method is specific to listening to changes from FilterDetails to render updated keyword tags.
-    private void renderNameKeywordTags(ReadOnlyFilterDetails details) {
-        nameTags.getChildren().clear();
-        if (details == null) {
-            return;
-        }
-        Set<String> nameKeywordTags = details.getNameKeywords();
-        nameKeywordTags.forEach(tag -> nameTags.getChildren().add(new Label(tag)));
-    }
-
     /*
     * Handles the event when the user presses 'Enter' in the name filter field.
     * Splits the input into individual keywords and displays them as tags in the UI.
      */
     @FXML
     private void handleNameFieldEntered() {
-        // Get the input text and split it into keywords
+        nameTags.getChildren().clear();
         String nameFilterText = nameFilterField.getText();
         if (nameFilterText.trim().isEmpty()) {
             return;
         }
         Set<String> nameFilterKeywordsSet = StringUtil.splitSentenceIntoWords(nameFilterText);
 
-        // Copy current filters first so updating name does not reset the other criteria.
-        FilterDetails newFilterDetails = new FilterDetails(filterDetails);
+        // Display each keyword as a tag in the UI
+        nameFilterKeywordsSet.forEach(tag -> nameTags.getChildren()
+                .add(new FilterPanelTag(tag).getRoot()));
+
+        // Create a new FilterDetails with updated name keywords
+        FilterDetails newFilterDetails = new FilterDetails(filterDetails.get());
         newFilterDetails.setNameKeywords(nameFilterKeywordsSet);
 
-        try {
-            filterExecutor.execute(newFilterDetails);
-        } catch (CommandException e) {
-            // No-op: MainWindow#executeCommand will handle displaying the error message to the user.
-        }
+        // Trigger the listener in ModelManager
+        filterDetails.set(newFilterDetails);
 
         nameFilterField.clear();
     }

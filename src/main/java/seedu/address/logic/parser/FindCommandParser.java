@@ -28,20 +28,13 @@ import seedu.address.model.FilterDetails;
 public class FindCommandParser implements Parser<FindCommand> {
 
     /**
-     * Returns name filter values exactly as provided via repeated {@code n=} prefixes.
-     */
-    private static Set<String> getNameKeywords(ArgumentMultimap argMultimap) {
-        return toSet(argMultimap.getAllValues(PREFIX_NAME));
-    }
-
-    /**
      * Builds a {@link FilterDetails} instance from the values in {@code argMultimap}.
      * All values for a given prefix are collected with {@code getAllValues} and converted
      * into {@link java.util.Set}s to remove duplicates.
      */
     private FilterDetails buildFilterDetails(ArgumentMultimap argMultimap) {
         // Build all keyword sets from ArgumentMultimap
-        Set<String> nameKeywords = getNameKeywords(argMultimap);
+        Set<String> nameKeywords = toSet(argMultimap.getAllValues(PREFIX_NAME));
         Set<String> emailKeywords = toSet(argMultimap.getAllValues(PREFIX_EMAIL));
         Set<String> phoneNumberKeywords = toSet(argMultimap.getAllValues(PREFIX_PHONE));
         Set<String> roomNumberKeywords = toSet(argMultimap.getAllValues(PREFIX_ROOM_NUMBER));

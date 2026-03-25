@@ -16,36 +16,36 @@ import seedu.address.ui.UiPart;
  * Reusable filter field in the {@code FilterPanel}.
  */
 public class FilterPanelField extends UiPart<Region> {
-	private static final String FXML = "FilterPanelField.fxml";
+    private static final String FXML = "FilterPanelField.fxml";
 
     private final List<String> keywords;
     private final KeywordsChangedHandler onKeywordsChanged;
 
-	@FXML
-	private Label titleLabel;
-	@FXML
-	private TextField keywordInputField;
-	@FXML
-	private Label keywordsLabel;
-	@FXML
-	private FlowPane keywordsFlowPane;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private TextField keywordInputField;
+    @FXML
+    private Label keywordsLabel;
+    @FXML
+    private FlowPane keywordsFlowPane;
 
-	/**
-	 * Creates a reusable filter field section.
-	 */
+    /**
+     * Creates a reusable filter field section.
+     */
     public FilterPanelField(String title, String promptText, KeywordsChangedHandler onKeywordsChanged) {
-		super(FXML);
-		requireNonNull(title);
-		requireNonNull(promptText);
+        super(FXML);
+        requireNonNull(title);
+        requireNonNull(promptText);
         this.onKeywordsChanged = requireNonNull(onKeywordsChanged);
         this.keywords = new ArrayList<>();
-		titleLabel.setText(title);
-		keywordInputField.setPromptText(promptText);
-	}
+        titleLabel.setText(title);
+        keywordInputField.setPromptText(promptText);
+    }
 
-	/**
+    /**
      * Replaces the current list of keywords and redraws this field's FlowPane tags.
-	 */
+     */
     public void setKeywords(List<String> updatedKeywords) {
         requireNonNull(updatedKeywords);
         keywords.clear();
@@ -53,22 +53,28 @@ public class FilterPanelField extends UiPart<Region> {
                 .map(keyword -> keyword.trim())
                 .forEach(this::addKeywordIfAbsent);
         renderKeywords();
-	}
+    }
 
-	@FXML
-	private void handleFieldEntered() {
-		String keyword = keywordInputField.getText();
+    /**
+     * Handler for when the user presses the Enter key in the keyword input field.
+     *
+     * It adds the keyword, re-render the FlowPane tags, trigger the
+     * {@code onKeywordsChanged} event handler, and finally clears the keyword input field.
+     */
+    @FXML
+    private void handleFieldEntered() {
+        String keyword = keywordInputField.getText();
         String trimmedKeyword = keyword.trim();
 
         if (trimmedKeyword == null || trimmedKeyword.isEmpty()) {
-			return;
-		}
+            return;
+        }
 
         addKeywordIfAbsent(trimmedKeyword);
         renderKeywords();
         onKeywordsChanged.handle(List.copyOf(keywords));
-		keywordInputField.clear();
-	}
+        keywordInputField.clear();
+    }
 
     private void addKeywordIfAbsent(String keyword) {
         if (!keywords.contains(keyword)) {
@@ -77,7 +83,7 @@ public class FilterPanelField extends UiPart<Region> {
     }
 
     private void renderKeywords() {
-		keywordsFlowPane.getChildren().clear();
+        keywordsFlowPane.getChildren().clear();
         keywords.forEach(keyword -> keywordsFlowPane.getChildren()
                 .add(new FilterPanelTag(keyword, this::handleDeleteTag).getRoot()));
     }
@@ -89,8 +95,11 @@ public class FilterPanelField extends UiPart<Region> {
 
         renderKeywords();
         onKeywordsChanged.handle(List.copyOf(keywords));
-	}
+    }
 
+    /**
+     * Handler for when the keywords in this field are edited.
+     */
     @FunctionalInterface
     public interface KeywordsChangedHandler {
         void handle(List<String> keywords);

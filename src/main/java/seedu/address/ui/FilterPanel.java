@@ -86,17 +86,17 @@ public class FilterPanel extends UiPart<Region> {
     }
 
     /**
-     * Binds filter field to its respective keyword set from {@link ReadOnlyFilterDetails}.
+     * Binds a filter field to its respective keyword set from {@link ReadOnlyFilterDetails}.
      *
-     * @param placeholder    target UI container
-     * @param title          section label
-     * @param promptText     placeholder text
+     * <p>When users edit tags in the field, this method routes the updated keyword list to
+     * {@link #applyAndExecute(KeywordSetter, Set)}. When {@code sourceKeywords} changes from elsewhere,
+     * this method updates the field UI so both directions stay synchronized.
+     *
+     * @param placeholder   target UI container
+     * @param title         section label
+     * @param promptText    placeholder text
      * @param sourceKeywords observable keyword set from {@link ReadOnlyFilterDetails} for this criterion.
-     * @param keywordSetter  setter that writes updated keywords.
-     *
-     *                       <p>When users edit tags in the field, this method routes the updated keyword list to
-     *                       {@link #applyAndExecute(KeywordSetter, Set)}. When {@code sourceKeywords} changes from elsewhere,
-     *                       this method updates the field UI so both directions stay synchronized.
+     * @param keywordSetter setter that writes updated keywords.
      */
     private void bindField(StackPane placeholder, String title, String promptText,
                            ObservableSet<String> sourceKeywords, KeywordSetter keywordSetter) {
@@ -118,11 +118,11 @@ public class FilterPanel extends UiPart<Region> {
     /**
      * Applies one criterion update to a fresh {@link FilterDetails} copy and executes filtering.
      *
-     * @param keywordSetter strategy that updates exactly one keyword set in the copied details.
+     * @param keywordSetter   strategy that updates exactly one keyword set in the copied details.
      * @param updatedKeywords user-edited keywords for the target criterion.
      *
-     * <p>This method preserves untouched criteria by copying from the current read-only details first,
-     * then mutating only the requested field via {@code keywordSetter}.
+     *                        <p>This method preserves untouched criteria by copying from the current read-only
+     *                        details first, then mutating only the requested field via {@code keywordSetter}.
      */
     private void applyAndExecute(KeywordSetter keywordSetter, Set<String> updatedKeywords) {
         FilterDetails newFilterDetails = new FilterDetails(filterDetails);

@@ -169,7 +169,7 @@ public class StringUtilTest {
         // Fuzzy match (2 edits)
         assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("kitti", wordSet));
 
-        // Fuzzy match (2 edits, query is 4 chars, target is 2 chars)
+        // Substring match (query is 4 chars, target is 2 chars)
         assertTrue(StringUtil.fuzzyMatchesAnyIgnoreCase("abcd", Set.of("ab")));
 
         // Substring match

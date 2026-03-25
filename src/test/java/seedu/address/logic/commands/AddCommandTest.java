@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import javafx.beans.property.ReadOnlyProperty;
 import org.junit.jupiter.api.Test;
 
 import javafx.beans.property.ObjectProperty;
@@ -176,6 +177,16 @@ public class AddCommandTest {
 
         @Override
         public ObjectProperty<FilterDetails> getFilterDetailsProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public ReadOnlyProperty<Person> selectedPersonProperty() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setSelectedPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
     }

@@ -1,16 +1,15 @@
 package seedu.address.ui.tab;
 
+import java.util.Comparator;
+
 import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 import seedu.address.ui.UiPart;
-import javafx.fxml.FXML;
-
-import javafx.scene.control.Label;
-
-import java.util.Comparator;
 
 /** Student profile component of the Student Details Tab. */
 public class Profile extends UiPart<Region> {
@@ -38,6 +37,10 @@ public class Profile extends UiPart<Region> {
     @FXML
     private TextField remarkField;
 
+    /**
+     * UI for the Profile Tab that is displayed on the left hand side of the main
+     * @param selectedPerson
+     */
     public Profile(ObservableValue<Person> selectedPerson) {
         super(FXML);
         selectedPerson.addListener((observable, oldValue, newValue) -> {

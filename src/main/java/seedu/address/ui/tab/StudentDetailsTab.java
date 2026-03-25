@@ -1,9 +1,7 @@
 package seedu.address.ui.tab;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
+import java.util.function.Consumer;
+
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
@@ -11,9 +9,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import seedu.address.model.person.Person;
 import seedu.address.ui.UiPart;
-
-import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * A ui for the main tab that is displayed on the main window.

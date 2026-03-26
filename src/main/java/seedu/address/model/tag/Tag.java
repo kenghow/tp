@@ -37,7 +37,7 @@ public class Tag {
      */
     public static boolean isValidTagName(String test, TagType type) {
         requireNonNull(type);
-        return test != null && type.isValidTagName(test);
+        return type.isValidTagName(test);
     }
 
     /**

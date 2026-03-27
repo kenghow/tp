@@ -52,7 +52,7 @@ public class FilterPanelField extends UiPart<Region> {
         updatedKeywords.stream()
                 .map(keyword -> keyword.trim())
                 .forEach(this::addKeywordIfAbsent);
-        renderKeywords();
+        renderKeywords(updatedKeywords);
     }
 
     /**
@@ -69,32 +69,38 @@ public class FilterPanelField extends UiPart<Region> {
         if (trimmedKeyword == null || trimmedKeyword.isEmpty()) {
             return;
         }
+        // Propose the new keyword list with the added keyword
+        List<String> proposedNewKeywords = addKeywordIfAbsent(trimmedKeyword);
 
-        addKeywordIfAbsent(trimmedKeyword);
-        renderKeywords();
-        onKeywordsChanged.handle(List.copyOf(keywords));
+        // Trigger the event handler to validate the proposed new keyword list
+        List<String> validatedNewKeywords = onKeywordsChanged.handle(List.copyOf(proposedNewKeywords));
+
+        // Update the keyword list with the validated new keyword list
+        renderKeywords(validatedNewKeywords);
         keywordInputField.clear();
     }
 
-    private void addKeywordIfAbsent(String keyword) {
+    private List<String> addKeywordIfAbsent(String keyword) {
         if (!keywords.contains(keyword)) {
             keywords.add(keyword);
         }
+        return keywords;
     }
 
-    private void renderKeywords() {
+    // Renders the proposed keywords as {@code FilterPanelTag} in the FlowPane
+    private void renderKeywords(List<String> proposedKeywords) {
         keywordsFlowPane.getChildren().clear();
-        keywords.forEach(keyword -> keywordsFlowPane.getChildren()
+        proposedKeywords.forEach(keyword -> keywordsFlowPane.getChildren()
                 .add(new FilterPanelTag(keyword, this::handleDeleteTag).getRoot()));
     }
 
+    // Remove tagToDelete from the keyword list
     private void handleDeleteTag(String tagToDelete) {
         if (!keywords.remove(tagToDelete)) {
             return;
         }
-
-        renderKeywords();
-        onKeywordsChanged.handle(List.copyOf(keywords));
+        List<String> updatedKeywordList = onKeywordsChanged.handle(List.copyOf(keywords));
+        renderKeywords(updatedKeywordList);
     }
 
     /**
@@ -102,6 +108,6 @@ public class FilterPanelField extends UiPart<Region> {
      */
     @FunctionalInterface
     public interface KeywordsChangedHandler {
-        void handle(List<String> keywords);
+        List<String> handle(List<String> keywords);
     }
 }

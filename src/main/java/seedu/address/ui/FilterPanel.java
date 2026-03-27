@@ -101,7 +101,6 @@ public class FilterPanel extends UiPart<Region> {
      */
     private void bindField(StackPane placeholder, String title, String promptText,
                            ObservableSet<String> sourceKeywords, KeywordSetter keywordSetter) {
-        // Create a FilterPanelField
         FilterPanelField field = new FilterPanelField(
                 title,
                 promptText,
@@ -125,7 +124,7 @@ public class FilterPanel extends UiPart<Region> {
      *                        <p>This method preserves untouched criteria by copying from the current read-only
      *                        details first, then mutating only the requested field via {@code keywordSetter}.
      */
-    private void applyAndExecute(KeywordSetter keywordSetter, Set<String> updatedKeywords) {
+    private List<String> applyAndExecute(KeywordSetter keywordSetter, Set<String> updatedKeywords) {
         FilterDetails newFilterDetails = new FilterDetails(filterDetails);
         keywordSetter.set(newFilterDetails, updatedKeywords);
 
@@ -134,6 +133,7 @@ public class FilterPanel extends UiPart<Region> {
         } catch (CommandException e) {
             // No-op: MainWindow#executeCommand handles user-visible errors.
         }
+        return List.copyOf(updatedKeywords);
     }
 
     /**

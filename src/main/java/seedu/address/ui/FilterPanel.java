@@ -88,7 +88,7 @@ public class FilterPanel extends UiPart<Region> {
      * Binds a filter field to its respective keywords, extracted from {@link ReadOnlyFilterDetails}.
      *
      * <p>When users edit tags in the field, this method sets the {@link ReadOnlyFilterDetails} via
-     * {@link #applyAndExecute(KeywordSetter, Set)}.
+     * {@link #applyKeywordsAndExecuteFilter(KeywordSetter, ObservableSet, Set)}.
      *
      * <p>When {@code sourceKeywords} changes from elsewhere, this method updates the field UI through a listener so
      * both UI and Model stay synchronized.
@@ -96,7 +96,7 @@ public class FilterPanel extends UiPart<Region> {
      * @param placeholder   target UI container
      * @param title         section label
      * @param promptText    placeholder text
-     * @param sourceKeywords observable keyword set from {@link ReadOnlyFilterDetails} for this criterion.
+     * @param sourceKeywords observable keyword set from {@link ReadOnlyFilterDetails} for this field.
      * @param keywordSetter setter that writes updated keywords.
      */
     private void bindField(StackPane placeholder, String title, String promptText,
@@ -104,36 +104,45 @@ public class FilterPanel extends UiPart<Region> {
         FilterPanelField field = new FilterPanelField(
                 title,
                 promptText,
-                // When the field updates, apply the change and execute filtering with the new criteria
-                keywords -> applyAndExecute(keywordSetter, new LinkedHashSet<>(keywords)));
+                // Every field has a {@code KeywordSetter} which applies the new keywords to a copied FilterDetails
+                // and execute filtering
+                keywords -> applyKeywordsAndExecuteFilter(
+                        keywordSetter,
+                        sourceKeywords,
+                        new LinkedHashSet<>(keywords)));
 
         field.setKeywords(List.copyOf(sourceKeywords));
         placeholder.getChildren().setAll(field.getRoot());
 
         // Listen for changes in the source keyword set and update the field accordingly
-        sourceKeywords.addListener((SetChangeListener<? super String>) change ->
+        sourceKeywords.addListener((SetChangeListener<? super String>) ignoredChange ->
                 field.setKeywords(List.copyOf(sourceKeywords)));
     }
 
     /**
-     * Applies one criterion update to a fresh {@link FilterDetails} copy and executes filtering.
+     * Applies one field type update to a fresh {@link FilterDetails} copy and executes filtering.
      *
      * @param keywordSetter   strategy that updates exactly one keyword set in the copied details.
-     * @param updatedKeywords user-edited keywords for the target criterion.
+     * @param updatedKeywords user-edited keywords for the target field.
      *
-     *                        <p>This method preserves untouched criteria by copying from the current read-only
+     *                        <p>This method preserves untouched field by copying from the current read-only
      *                        details first, then mutating only the requested field via {@code keywordSetter}.
      */
-    private List<String> applyAndExecute(KeywordSetter keywordSetter, Set<String> updatedKeywords) {
+    private List<String> applyKeywordsAndExecuteFilter(
+            KeywordSetter keywordSetter,
+            ObservableSet<String> sourceKeywords,
+            Set<String> updatedKeywords) {
         FilterDetails newFilterDetails = new FilterDetails(filterDetails);
         keywordSetter.set(newFilterDetails, updatedKeywords);
 
         try {
             filterExecutor.execute(newFilterDetails);
         } catch (CommandException e) {
-            // No-op: MainWindow#executeCommand handles user-visible errors.
+            // Rebuild UI from last accepted values.
+            return List.copyOf(sourceKeywords);
         }
-        return List.copyOf(updatedKeywords);
+
+        return List.copyOf(sourceKeywords);
     }
 
     /**

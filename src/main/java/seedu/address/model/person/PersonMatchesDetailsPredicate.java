@@ -5,7 +5,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.FilterDetails;
 
@@ -31,7 +30,7 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
 
     @Override
     public boolean test(Person person) {
-        return isNameMatch(person)
+        return isFuzzyMatch(person.getName().fullName, filterDetails.getNameKeywords())
                 && isFuzzyMatch(person.getEmail().value, filterDetails.getEmailKeywords())
                 && isFuzzyMatch(person.getPhone().value, filterDetails.getPhoneNumberKeywords())
                 && isFuzzyMatch(person.getRoomNumber().value, filterDetails.getRoomNumberKeywords())
@@ -40,21 +39,6 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
                 && matchesFuzzyTags(person, filterDetails.getTagYearKeywords())
                 && matchesFuzzyTags(person, filterDetails.getTagMajorKeywords())
                 && matchesExactTags(person, filterDetails.getTagGenderKeywords());
-    }
-
-    /**
-     * Checks if the person's name matches any of the keywords specified in {@code FilterDetails}.
-     */
-    private boolean isNameMatch(Person person) {
-        if (filterDetails.getNameKeywords().isEmpty()) {
-            return true;
-        }
-        Set<String> nameKeywords = filterDetails.getNameKeywords();
-        Set<String> nameWords = StringUtil.splitSentenceIntoWords(person.getName().fullName);
-        if (nameWords.isEmpty()) {
-            return false;
-        }
-        return nameWords.stream().anyMatch(nameWord -> StringUtil.fuzzyMatchesAnyIgnoreCase(nameWord, nameKeywords));
     }
 
     /**

@@ -38,14 +38,14 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
                 && isFuzzyMatch(person.getRoomNumber().value, filterDetails.getRoomNumberKeywords())
                 && isFuzzyMatch(person.getStudentId().value, filterDetails.getStudentIdKeywords())
                 && isFuzzyMatch(person.getEmergencyContact().value, filterDetails.getEmergencyContactKeywords())
-                && matchesFuzzyTags(person.getYear().getTagName(), filterDetails.getTagYearKeywords())
-                && matchesFuzzyTags(person.getMajor().getTagName(), filterDetails.getTagMajorKeywords())
-                && matchesExactTags(person.getGender().getTagName(), filterDetails.getTagGenderKeywords());
+                && isFuzzyMatch(person.getYear().getTagName(), filterDetails.getTagYearKeywords())
+                && isFuzzyMatch(person.getMajor().getTagName(), filterDetails.getTagMajorKeywords())
+                && isExactMatch(person.getGender().getTagName(), filterDetails.getTagGenderKeywords());
     }
 
     /**
-     * Checks if the given {@code fieldValue} matches any of the {@code keywords} via substring matching
-     * (case-insensitive).
+     * Checks if the given {@code fieldValue} matches any of the {@code keywords} via fuzzy matching defined in
+     * {@link StringUtil#fuzzyMatchesAnyIgnoreCase(String, Set)}.
      */
     private boolean isFuzzyMatch(String fieldValue, Set<String> keywords) {
         requireNonNull(fieldValue);
@@ -56,32 +56,15 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
         if (fieldValue.isEmpty()) {
             return false;
         }
-        String lower = fieldValue.toLowerCase();
-        return keywords.stream().map(k -> k.toLowerCase()).anyMatch(lower::contains);
+
+        return StringUtil.fuzzyMatchesAnyIgnoreCase(fieldValue, keywords);
     }
 
     /**
-     * Checks if the person's tag match any of the {@code keywords} via fuzzy matching, as defined in
-     * {@link StringUtil#fuzzyMatchesAnyIgnoreCase(String, Set)}.
+     * Checks if any of the person's tags exactly match any of the {@code keywords} as defined in
+     * {@link StringUtil#equalsAnyIgnoreCase(String, Set)}
      */
-    private boolean matchesFuzzyTags(String tag, Set<String> keywords) {
-        requireNonNull(tag);
-        requireNonNull(keywords);
-
-        if (keywords.isEmpty()) {
-            return true;
-        }
-        if (tag.isEmpty()) {
-            return false;
-        }
-
-        return StringUtil.fuzzyMatchesAnyIgnoreCase(tag, keywords);
-    }
-
-    /**
-     * Checks if any of the person's tags exactly match any of the {@code keywords} (case-insensitive)
-     */
-    private boolean matchesExactTags(String tag, Set<String> keywords) {
+    private boolean isExactMatch(String tag, Set<String> keywords) {
         requireNonNull(tag);
         requireNonNull(keywords);
 

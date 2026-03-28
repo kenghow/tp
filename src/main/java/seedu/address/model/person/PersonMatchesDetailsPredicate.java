@@ -13,7 +13,12 @@ import seedu.address.model.FilterDetails;
 /**
  * Tests whether a {@code Person} matches the details specified in a {@link FilterDetails}.
  */
-public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) implements Predicate<Person> {
+public class PersonMatchesDetailsPredicate implements Predicate<Person> {
+
+    /**
+     * The filter details to match against.
+     */
+    private final FilterDetails filterDetails;
 
     /**
      * Creates a {@code PersonMatchesDetailsPredicate} with the given {@code FilterDetails}.
@@ -25,7 +30,6 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
     /**
      * Returns a snapshot of the filter details used by this predicate.
      */
-    @Override
     public FilterDetails filterDetails() {
         return new FilterDetails(filterDetails);
     }
@@ -58,7 +62,7 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
     /**
      * Checks if the given {@code fieldValue} matches any of the {@code keywords} via fuzzy matching defined in
      * {@link StringUtil#fuzzyMatchesAnyIgnoreCase(String, Set)}.
-     *
+     * <p>
      * If the field value is empty, it will only match if the keywords are also empty.
      */
     private boolean isFuzzyMatch(String fieldValue, Set<String> keywords) {
@@ -78,7 +82,7 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
     /**
      * Checks if any of the person's tags exactly match any of the {@code keywords} as defined in
      * {@link StringUtil#equalsAnyIgnoreCase(String, Set)}.
-     *
+     * <p>
      * If the field value is empty, it will only match if the keywords are also empty.
      */
     private boolean isExactMatch(String fieldValue, Set<String> keywords) {
@@ -112,4 +116,10 @@ public record PersonMatchesDetailsPredicate(FilterDetails filterDetails) impleme
                 .add("filterDetails", filterDetails)
                 .toString();
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(filterDetails);
+    }
+
 }

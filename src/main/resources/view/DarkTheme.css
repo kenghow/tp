@@ -85,6 +85,23 @@
     -fx-border-color: transparent;
 }
 
+.text-area.label-remark,
+.text-area.label-remark:focused {
+    -fx-background-color: derive(medium-grey);
+    -fx-text-fill: primary-yellow;
+    -fx-font-size: 11pt;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-highlight-fill: derive(primary-yellow);
+    -fx-highlight-text-fill: white;
+}
+
+.text-area.label-remark .content {
+    -fx-background-color: medium-grey;
+    -fx-background-insets: 0;
+}
+
 .label-field {
     -fx-text-fill: derive(light-grey, 50%);
     -fx-background-color: transparent;

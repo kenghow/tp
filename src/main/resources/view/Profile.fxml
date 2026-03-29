@@ -34,7 +34,17 @@
         <Label styleClass="label-bright" text="Emergency Contact:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
         <TextField fx:id="emergencyContactField" editable="false" focusTraversable="false" styleClass="label-field" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-        <Label styleClass="label-bright" text="Remark" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-        <TextArea fx:id="remarkField" editable="false" prefRowCount="3" styleClass="label-remark" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS" />
+        <Label styleClass="label-bright" text="Remark" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+        <TextArea fx:id="remarkField" editable="false" maxHeight="1.7976931348623157E308" prefHeight="120.0" prefRowCount="3" styleClass="label-remark" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="7" GridPane.vgrow="ALWAYS" />
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints minHeight="10.0" prefHeight="30.0" />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
     </GridPane>
 </VBox>

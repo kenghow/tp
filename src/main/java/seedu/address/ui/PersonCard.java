@@ -69,10 +69,15 @@ public class PersonCard extends UiPart<Region> {
     private void handleClickOnTextField() {
         phone.addEventFilter(MouseEvent.MOUSE_PRESSED,
                 event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
-        studentId.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
-        email.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
-        roomNumber.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
-        emergencyContact.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
-        demeritPoints.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
+        studentId.addEventFilter(MouseEvent.MOUSE_PRESSED,
+                event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
+        email.addEventFilter(MouseEvent.MOUSE_PRESSED,
+                event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
+        roomNumber.addEventFilter(MouseEvent.MOUSE_PRESSED,
+                event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
+        emergencyContact.addEventFilter(MouseEvent.MOUSE_PRESSED,
+                event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
+        demeritPoints.addEventFilter(MouseEvent.MOUSE_PRESSED,
+                event -> cardPane.fireEvent(event.copyFor(cardPane, cardPane)));
     }
 }

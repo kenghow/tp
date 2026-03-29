@@ -13,6 +13,8 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
+import javafx.geometry.Rectangle2D;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
@@ -140,12 +142,15 @@ public class MainWindow extends UiPart<Stage> {
      * Sets the default size based on {@code guiSettings}.
      */
     private void setWindowDefaultSize(GuiSettings guiSettings) {
-        primaryStage.setHeight(guiSettings.getWindowHeight());
-        primaryStage.setWidth(guiSettings.getWindowWidth());
-        if (guiSettings.getWindowCoordinates() != null) {
+        // If the saved window coordinates are not visible, move the window to the primary screen
+        // This can happen when the screen resolution is changed or when the app is opened on a different monitor
+        if (hasVisibleWindowCoordinates(guiSettings)) {
             primaryStage.setX(guiSettings.getWindowCoordinates().getX());
             primaryStage.setY(guiSettings.getWindowCoordinates().getY());
+        } else {
+            moveWindowToPrimaryScreen();
         }
+        primaryStage.setMaximized(true);
     }
 
     /**
@@ -203,6 +208,27 @@ public class MainWindow extends UiPart<Stage> {
 
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == confirmButton;
+    }
+
+    private boolean hasVisibleWindowCoordinates(GuiSettings guiSettings) {
+        if (guiSettings.getWindowCoordinates() == null) {
+            return false;
+        }
+
+        return isCoordinateVisible(guiSettings.getWindowCoordinates().getX(),
+                guiSettings.getWindowCoordinates().getY());
+    }
+
+    private boolean isCoordinateVisible(double x, double y) {
+        return Screen.getScreens().stream()
+                .map(Screen::getVisualBounds)
+                .anyMatch(bounds -> bounds.contains(x, y));
+    }
+
+    private void moveWindowToPrimaryScreen() {
+        Rectangle2D primaryBounds = Screen.getPrimary().getVisualBounds();
+        primaryStage.setX(primaryBounds.getMinX());
+        primaryStage.setY(primaryBounds.getMinY());
     }
 
     // =============================== Executing Commands  ================================

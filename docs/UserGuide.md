@@ -310,6 +310,7 @@ Action     | Format, Examples
 **[Edit](#editing-a-person--edit)**   | `edit i=STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [i=STUDENT_ID] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br> e.g., `edit A1234567X n=James Lee e=jameslee@example.com`
 **[Tag](#tagging-a-student-tag)**    | `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`<br> e.g., `tag i=A1234567X m=CS y=Y3`
 **[Find](#locating-persons--find)**   | `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`<br> e.g., `find n=James y=Y1`
+**[Remark](#adding-a-remark-remark)**   | `remark i=STUDENT_ID rm=REMARK`<br> e.g., `remark i=A030303X rm=Allergic to peanuts`
 **[Demerit List](#listing-demerit-rules-demeritlist)** | `demeritlist`
 **[Add Demerit](#adding-a-demerit-record-demerit)** | `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`<br> e.g., `demerit i=A1234567X di=18 rm=Visitor during quiet hours`
 **[List](#listing-all-persons--list)**   | `list`

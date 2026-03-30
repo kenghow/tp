@@ -1,25 +1,28 @@
 package seedu.address.model.tag;
 
+import java.util.Locale;
+
 /**
  * Represents the type of a Tag in the address book.
  * Guarantees: immutable; name is valid
  */
 public enum TagType {
 
-    YEAR(1, "^[1-6]$"),
-    MAJOR(1, "[\\p{Alnum} ]*[\\p{Alnum}]+[\\p{Alnum} ]*"),
-    GENDER(1, "[\\p{Alnum}/][\\p{Alnum}/ ]*");
+    YEAR( "^[1-6]$"),
+    MAJOR( "[\\p{Alnum} ]*[\\p{Alnum}]+[\\p{Alnum} ]*"),
+    GENDER("^(she/her|he/him|they/them)$");
 
-    private final int maxTagsPerType;
     private final String validationRegex;
 
 
-    TagType(int maxTagsPerType, String validationRegex) {
-        this.maxTagsPerType = maxTagsPerType;
+    TagType( String validationRegex) {
         this.validationRegex = validationRegex;
     }
 
     public boolean isValidTagName(String tagName) {
-        return tagName != null && tagName.matches(validationRegex);
+        if (tagName == null) {
+            return true;
+        }
+        return tagName.matches(validationRegex);
     }
 }

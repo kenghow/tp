@@ -26,10 +26,9 @@ public class Tag {
         requireNonNull(tagName);
         requireNonNull(tagName);
 
-        String trimmedName = tagName.trim();
-        checkArgument(isValidTagName(trimmedName, tagType), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidTagName(tagName, tagType), MESSAGE_CONSTRAINTS);
 
-        this.tagName = trimmedName;
+        this.tagName = getNormalisedTagName(tagName);
         this.tagType = tagType;
     }
 
@@ -38,7 +37,11 @@ public class Tag {
      */
     public static boolean isValidTagName(String test, TagType type) {
         requireNonNull(type);
-        return type.isValidTagName(test);
+        return type.isValidTagName(getNormalisedTagName(test));
+    }
+
+    public static String getNormalisedTagName(String test) {
+        return test.trim().toLowerCase();
     }
 
     /**
@@ -60,10 +63,9 @@ public class Tag {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof Tag)) {
+        if (!(other instanceof Tag otherTag)) {
             return false;
         }
-        Tag otherTag = (Tag) other;
         return tagType == otherTag.tagType && tagName.equals(otherTag.tagName);
     }
 

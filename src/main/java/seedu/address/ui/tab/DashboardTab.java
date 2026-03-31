@@ -48,9 +48,9 @@ public class DashboardTab extends UiPart<Region> {
         long totalCount = list.size();
 
         // ---Gender groups via tags---
-        long male = countByTag(list, "he") + countByTag(list, "him");
-        long female = countByTag(list, "she") + countByTag(list, "her");
-        long other = countByTag(list, "they") + countByTag(list, "them");
+        long male = countByTag(list, "he/him");
+        long female = countByTag(list, "she/her");
+        long other = countByTag(list, "they/them");
 
         totalCountLabel.setText(String.valueOf(totalCount));
         maleCountLabel.setText(String.valueOf(male));

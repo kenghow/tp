@@ -62,6 +62,7 @@ public class Tag {
         if (!(other instanceof Tag)) {
             return false;
         }
+
         Tag otherTag = (Tag) other;
         return tagType == otherTag.tagType && tagName.equals(otherTag.tagName);
     }

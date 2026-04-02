@@ -33,7 +33,7 @@ public class RemarkCommand extends Command {
      * @param studentId of the person to edit
      * @param remark to add to the person
      */
-        public RemarkCommand(StudentId studentId, Remark remark) {
+    public RemarkCommand(StudentId studentId, Remark remark) {
         requireNonNull(studentId);
         requireNonNull(remark);
 

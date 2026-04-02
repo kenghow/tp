@@ -52,6 +52,8 @@ public class Messages {
                 .append(person.getRoomNumber())
                 .append("; Emergency Contact: ")
                 .append(person.getEmergencyContact())
+                .append("; Remark: ")
+                .append(person.getRemark())
                 .append("; Tags: ");
         person.getTags().entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())

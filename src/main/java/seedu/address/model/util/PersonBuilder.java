@@ -148,14 +148,6 @@ public class PersonBuilder {
         return this;
     }
 
-    /**
-     * Sets the demerit incidents of the {@code Person} that we are building.
-     */
-    public PersonBuilder withDemeritIncidents(List<DemeritIncident> demeritIncidents) {
-        this.demeritIncidents = new ArrayList<>(demeritIncidents);
-        return this;
-    }
-
     public Person build() {
         return new Person(name, phone, email, studentId, roomNumber, emergencyContact, remark, tags,
                 demeritIncidents);

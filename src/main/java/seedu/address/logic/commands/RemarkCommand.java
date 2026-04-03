@@ -51,6 +51,7 @@ public class RemarkCommand extends Command {
         Person editedPerson = createEditedPerson(personToRemark, remark);
 
         model.setPerson(personToRemark, editedPerson);
+        model.setSelectedPerson(editedPerson);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(editedPerson)));
     }

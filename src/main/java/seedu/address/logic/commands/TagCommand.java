@@ -69,8 +69,9 @@ public class TagCommand extends Command {
 
         Person taggedPerson = createTaggedPerson(personToTag, tags);
 
-        model.setPerson(personToTag, taggedPerson);
         model.showAllPersons();
+        model.setPerson(personToTag, taggedPerson);
+        model.setSelectedPerson(taggedPerson);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(taggedPerson)));
     }

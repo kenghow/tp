@@ -21,7 +21,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonMatchesDetailsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
-import seedu.address.testutil.PersonBuilder;
+import seedu.address.model.util.PersonBuilder;
 
 public class ModelManagerTest {
 

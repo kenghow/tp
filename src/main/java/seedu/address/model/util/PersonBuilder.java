@@ -1,4 +1,4 @@
-package seedu.address.testutil;
+package seedu.address.model.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,8 +16,6 @@ import seedu.address.model.person.RoomNumber;
 import seedu.address.model.person.StudentId;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagType;
-import seedu.address.model.util.DemeritIncidentUtil;
-import seedu.address.model.util.TagUtil;
 
 /**
  * A utility class to help with building Person objects.

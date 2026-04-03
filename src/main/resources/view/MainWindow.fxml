@@ -37,7 +37,8 @@
 
         <SplitPane dividerPositions="0.5" orientation="VERTICAL" VBox.vgrow="ALWAYS">
             <!-- Result Display -->
-            <StackPane fx:id="resultDisplayPlaceholder" maxHeight="300" minHeight="100" prefHeight="100" styleClass="stack-pane">
+            <StackPane fx:id="resultDisplayPlaceholder" maxHeight="230" minHeight="100" prefHeight="120"
+                       styleClass="stack-pane">
                 <padding>
                     <Insets bottom="5" left="10" right="10" top="5" />
                 </padding>

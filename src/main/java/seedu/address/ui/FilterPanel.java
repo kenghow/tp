@@ -126,10 +126,8 @@ public class FilterPanel extends UiPart<Region> {
     /**
      * Binds a combo-box based filter field to the keywords it is supposed to display.
      *
-     * <p>
-     * When users edit tags in the field, this method sets the {@link ReadOnlyFilterDetails} via
+     * <p>When users edit tags in the field, this method sets the {@link ReadOnlyFilterDetails} via
      * {@link #applyKeywordsAndExecuteFilter(KeywordSetter, ObservableSet, Set
-     * </p>
      */
     private void bindComboBoxField(StackPane placeholder,
                                    String title,

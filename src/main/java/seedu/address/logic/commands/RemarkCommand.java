@@ -32,9 +32,6 @@ public class RemarkCommand extends Command {
     /**
      * Creates a {@code RemarkCommand} to add the specified {@code Remark}.
      * to the resident identified by the given {@code StudentId}.
-     *
-     * @param studentId the unique identifier of the resident to add the remark to.
-     * @param remark    the remark for the resident.
      */
     public RemarkCommand(StudentId studentId, Remark remark) {
         requireNonNull(studentId);

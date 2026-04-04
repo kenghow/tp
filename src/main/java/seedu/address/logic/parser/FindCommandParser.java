@@ -158,25 +158,6 @@ public class FindCommandParser implements Parser<FindCommand> {
         return new HashSet<>(rawKeywords);
     }
 
-    private Set<String> collectValidYearKeywords(List<String> rawKeywords) {
-        Set<String> validKeywords = new HashSet<>();
-        for (String value : rawKeywords) {
-            String trimmedValue = value.trim();
-            ParserUtil.tryNormalizeYear(trimmedValue).ifPresent(validKeywords::add);
-        }
-        return validKeywords;
-    }
-
-    private Set<String> collectValidGenderKeywords(List<String> rawKeywords) {
-        Set<String> normalizedKeywords = new HashSet<>();
-        for (String value : rawKeywords) {
-            String trimmedValue = value.trim();
-            ParserUtil.tryNormalizeGender(trimmedValue)
-                    .ifPresent(normalizedKeywords::add);
-        }
-        return normalizedKeywords;
-    }
-
     private void checkForUnknownPrefixes(String args) throws ParseException {
         String unknownPrefix = ArgumentTokenizer.checkForUnknownPrefixes(args, PREFIXES_TO_CHECK);
 

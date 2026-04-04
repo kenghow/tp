@@ -67,7 +67,7 @@ public class TagCommandParser implements Parser<TagCommand> {
      *
      * @param argumentMultimap the ArgumentMultimap containing the parsed arguments.
      * @return a Map of TagType to Tag containing the parsed tags.
-     * @throws ParseException if any of the tag values are invalid or if no tags are provided.
+     * @throws ParseException if any of the tag content are invalid or if no tags are provided.
      */
     private Map<TagType, Tag> parseTags(ArgumentMultimap argumentMultimap) throws ParseException {
         Map<TagType, Tag> tags = new HashMap<>();

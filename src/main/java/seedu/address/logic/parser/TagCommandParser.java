@@ -91,5 +91,4 @@ public class TagCommandParser implements Parser<TagCommand> {
                         ? null // sentinel to indicate tag removal if the user provided an empty string
                         : new Tag(type, v)));
     }
-
 }

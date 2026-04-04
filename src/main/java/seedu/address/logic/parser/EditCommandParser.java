@@ -31,7 +31,7 @@ public class EditCommandParser implements Parser<EditCommand> {
      */
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ParserUtil.checkForUnknownPrefixes(args, EditCommand.MESSAGE_USAGE, knownPrefixes);
+        //ParserUtil.checkForUnknownPrefixes(args, EditCommand.MESSAGE_USAGE, knownPrefixes);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, knownPrefixes);
 
         validatePrefixes(argMultimap);
@@ -87,11 +87,12 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         // Check for duplicate student ID prefixes (allow up to 2)
         if (argMultimap.getAllValues(PREFIX_STUDENT_ID).size() > 2) {
+            System.out.println(argMultimap.getAllValues(PREFIX_STUDENT_ID));
             throw new ParseException(String.format(EditCommand.MESSAGE_DUPLICATE_STUDENT_ID_PREFIX,
                     EditCommand.MESSAGE_USAGE));
         }
 
         // Check for duplicate prefixes in single-valued fields
-        argMultimap.verifyNoDuplicatePrefixesFor(knownPrefixes);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ROOM_NUMBER, PREFIX_EMERGENCY_CONTACT);
     }
 }

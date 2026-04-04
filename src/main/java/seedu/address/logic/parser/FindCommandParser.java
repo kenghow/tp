@@ -3,7 +3,6 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_EMPTY_ARGUMENT;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_PREFIX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -72,7 +71,9 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        checkForUnknownPrefixes(args);
+        ParserUtil.checkForUnknownPrefixes(args, FindCommand.MESSAGE_USAGE, PREFIX_NAME, PREFIX_EMAIL, PREFIX_PHONE,
+                PREFIX_ROOM_NUMBER, PREFIX_STUDENT_ID, PREFIX_EMERGENCY_CONTACT, PREFIX_TAG_YEAR, PREFIX_TAG_MAJOR,
+                PREFIX_TAG_GENDER);
 
         // Tokenize the arguments
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
@@ -97,16 +98,5 @@ public class FindCommandParser implements Parser<FindCommand> {
             throw new ParseException(exception.getMessage());
         }
         return new FindCommand(filterDetails);
-    }
-
-    private void checkForUnknownPrefixes(String args) throws ParseException {
-        String unknownPrefix = ArgumentTokenizer.checkForUnknownPrefixes(args, PREFIX_NAME, PREFIX_EMAIL, PREFIX_PHONE,
-                PREFIX_ROOM_NUMBER, PREFIX_STUDENT_ID, PREFIX_EMERGENCY_CONTACT, PREFIX_TAG_YEAR,
-                PREFIX_TAG_MAJOR, PREFIX_TAG_GENDER);
-
-        if (!unknownPrefix.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_UNKNOWN_PREFIX, unknownPrefix)
-                    + "\n" + FindCommand.MESSAGE_USAGE);
-        }
     }
 }

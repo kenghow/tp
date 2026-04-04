@@ -2,7 +2,6 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_PREFIX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMERGENCY_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -22,10 +21,8 @@ import seedu.address.model.person.StudentId;
  */
 public class EditCommandParser implements Parser<EditCommand> {
 
-    private static final List<Prefix> KNOWN_PREFIXES = List.of(
-        PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-        PREFIX_STUDENT_ID, PREFIX_ROOM_NUMBER, PREFIX_EMERGENCY_CONTACT
-    );
+    private Prefix[] knownPrefixes = {PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+        PREFIX_STUDENT_ID, PREFIX_ROOM_NUMBER, PREFIX_EMERGENCY_CONTACT};
 
     /**
      * Parses the given {@code String} of arguments in the context of the EditCommand
@@ -34,15 +31,8 @@ public class EditCommandParser implements Parser<EditCommand> {
      */
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        checkForUnknownPrefixes(args);
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args,
-                        PREFIX_NAME,
-                        PREFIX_PHONE,
-                        PREFIX_EMAIL,
-                        PREFIX_STUDENT_ID,
-                        PREFIX_ROOM_NUMBER,
-                        PREFIX_EMERGENCY_CONTACT);
+        //ParserUtil.checkForUnknownPrefixes(args, EditCommand.MESSAGE_USAGE, knownPrefixes);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, knownPrefixes);
 
         validatePrefixes(argMultimap);
 
@@ -83,7 +73,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         return new EditCommand(targetStudentId, editPersonDescriptor);
     }
 
-    private static void validatePrefixes(ArgumentMultimap argMultimap) throws ParseException {
+    private void validatePrefixes(ArgumentMultimap argMultimap) throws ParseException {
         // If there's a preamble -> invalid command format
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
@@ -97,26 +87,13 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         // Check for duplicate student ID prefixes (allow up to 2)
         if (argMultimap.getAllValues(PREFIX_STUDENT_ID).size() > 2) {
+            System.out.println(argMultimap.getAllValues(PREFIX_STUDENT_ID));
             throw new ParseException(String.format(EditCommand.MESSAGE_DUPLICATE_STUDENT_ID_PREFIX,
                     EditCommand.MESSAGE_USAGE));
         }
 
         // Check for duplicate prefixes in single-valued fields
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                PREFIX_ROOM_NUMBER, PREFIX_EMERGENCY_CONTACT);
-    }
-
-    private void checkForUnknownPrefixes(String args) throws ParseException {
-        String unknownPrefix = ArgumentTokenizer.checkForUnknownPrefixes(args, PREFIX_NAME,
-                PREFIX_PHONE,
-                PREFIX_EMAIL,
-                PREFIX_STUDENT_ID,
-                PREFIX_ROOM_NUMBER,
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ROOM_NUMBER,
                 PREFIX_EMERGENCY_CONTACT);
-
-        if (!unknownPrefix.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_UNKNOWN_PREFIX, unknownPrefix)
-                    + "\n" + EditCommand.MESSAGE_USAGE);
-        }
     }
 }

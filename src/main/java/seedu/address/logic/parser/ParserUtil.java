@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_PREFIX;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -178,6 +179,26 @@ public class ParserUtil {
             return value;
         } catch (NumberFormatException e) {
             throw new ParseException("Demerit rule index must be a positive integer.");
+        }
+    }
+
+    /**
+     * Checks if the given {@code args} contains any occurances of "%=" that are not in the list of
+     * {@code knownPrefixes}. If there are, a ParseException is thrown with a message indicating the unknown prefix
+     * and the correct {@code usage format}.
+     *
+     * @param args the input arguments to check for unknown prefixes
+     * @param usageFormat the correct usage format to include in the exception message if an unknown prefix is found
+     * @param knownPrefixes the list of known prefixes to check against
+     * @throws ParseException if an unknown prefix is found in the input arguments
+     */
+    public static void checkForUnknownPrefixes(String args, String usageFormat, Prefix... knownPrefixes)
+            throws ParseException {
+        String unknownPrefix = ArgumentTokenizer.checkForUnknownPrefixes(args, knownPrefixes);
+
+        if (!unknownPrefix.isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_UNKNOWN_PREFIX, unknownPrefix)
+                    + "\n" + usageFormat);
         }
     }
 }

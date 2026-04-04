@@ -78,6 +78,14 @@ public class ArgumentMultimap {
     }
 
     /**
+     * Returns true if none of the prefixes contains empty {@code Optional} values in the given
+     * {@code ArgumentMultimap}.
+     */
+    public boolean arePrefixesPresent(Prefix... prefixes) {
+        return Stream.of(prefixes).allMatch(prefix -> this.getValue(prefix).isPresent());
+    }
+
+    /**
      * Returns a new ArgumentMultimap with all empty string values removed, and prefixes that only have empty string
      * values will also be removed.
      *

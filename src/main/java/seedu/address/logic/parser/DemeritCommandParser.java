@@ -1,6 +1,5 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_PREFIX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DEMERIT_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARK;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
@@ -21,11 +20,12 @@ public class DemeritCommandParser implements Parser<DemeritCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public DemeritCommand parse(String args) throws ParseException {
-        checkForUnknownPrefixes(args);
+        ParserUtil.checkForUnknownPrefixes(args, DemeritCommand.MESSAGE_USAGE, PREFIX_STUDENT_ID,
+                PREFIX_DEMERIT_INDEX, PREFIX_REMARK);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_STUDENT_ID, PREFIX_DEMERIT_INDEX, PREFIX_REMARK);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_STUDENT_ID, PREFIX_DEMERIT_INDEX)
+        if (!argMultimap.arePrefixesPresent(PREFIX_STUDENT_ID, PREFIX_DEMERIT_INDEX)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(DemeritCommand.MESSAGE_USAGE);
         }
@@ -39,24 +39,5 @@ public class DemeritCommandParser implements Parser<DemeritCommand> {
         String remark = argMultimap.getValue(PREFIX_REMARK).orElse("");
 
         return new DemeritCommand(studentId, ruleIndex, remark);
-    }
-
-    private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
-        for (Prefix prefix : prefixes) {
-            if (argumentMultimap.getValue(prefix).isEmpty()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void checkForUnknownPrefixes(String args) throws ParseException {
-        String unknownPrefix = ArgumentTokenizer.checkForUnknownPrefixes(args, PREFIX_STUDENT_ID, PREFIX_DEMERIT_INDEX,
-                PREFIX_REMARK);
-
-        if (!unknownPrefix.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_UNKNOWN_PREFIX, unknownPrefix)
-                    + "\n" + DemeritCommand.MESSAGE_USAGE);
-        }
     }
 }

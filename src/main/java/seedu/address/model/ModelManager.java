@@ -38,7 +38,7 @@ public class ModelManager implements Model {
     public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs) {
         requireAllNonNull(addressBook, userPrefs);
 
-        logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
+        logger.fine("Initializing with hall ledger: " + addressBook + " and user prefs " + userPrefs);
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
@@ -147,7 +147,7 @@ public class ModelManager implements Model {
     @Override
     public Optional<Person> getPersonByStudentId(StudentId studentId) {
         requireNonNull(studentId);
-        return filteredPersons.stream()
+        return addressBook.getPersonList().stream()
                 .filter(p -> p.getStudentId().equals(studentId))
                 .findFirst();
     }

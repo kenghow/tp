@@ -2,7 +2,6 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_PREFIX;
 import static seedu.address.logic.commands.TagCommand.MESSAGE_USAGE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
@@ -34,7 +33,10 @@ public class TagCommandParser implements Parser<TagCommand> {
      */
     public TagCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        checkForUnknownPrefixes(args);
+        ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, PREFIX_STUDENT_ID,
+                CliSyntax.PREFIX_TAG_GENDER,
+                CliSyntax.PREFIX_TAG_MAJOR,
+                CliSyntax.PREFIX_TAG_YEAR);
 
         ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, ALL_PREFIXES);
 
@@ -67,14 +69,5 @@ public class TagCommandParser implements Parser<TagCommand> {
             throw new ParseException(TagCommand.MESSAGE_TAG_NOT_ADDED);
         }
         return tags;
-    }
-
-    private void checkForUnknownPrefixes(String args) throws ParseException {
-        String unknownPrefix = ArgumentTokenizer.checkForUnknownPrefixes(args, ALL_PREFIXES);
-
-        if (!unknownPrefix.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_UNKNOWN_PREFIX, unknownPrefix)
-                    + "\n" + TagCommand.MESSAGE_USAGE);
-        }
     }
 }

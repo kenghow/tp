@@ -51,6 +51,7 @@ public class TagCommandParser implements Parser<TagCommand> {
     }
 
     private Map<TagType, Tag> parseTags(ArgumentMultimap argumentMultimap) throws ParseException {
+
         Map<TagType, Tag> tags = new HashMap<>();
 
         try {
@@ -69,7 +70,10 @@ public class TagCommandParser implements Parser<TagCommand> {
     }
 
     private void putTagIfPresent(Map<TagType, Tag> tags, Optional<String> value, TagType type) {
-        value.ifPresent(v -> tags.put(type, v.isEmpty() ? null : new Tag(type, v)));
+        value.ifPresent(v ->
+                tags.put(type, v.isEmpty()
+                        ? null // sentinel to indicate tag removal if the user provided an empty string
+                        : new Tag(type, v)));
     }
 
 }

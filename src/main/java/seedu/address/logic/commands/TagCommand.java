@@ -84,7 +84,7 @@ public class TagCommand extends Command {
 
         tags.forEach((type, tag) -> {
             if (tag == null) {
-                updatedTags.remove(type); // flush the tag
+                updatedTags.remove(type); // remove the tag
             } else {
                 updatedTags.put(type, tag);
             }

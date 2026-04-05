@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_GENDER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_MAJOR;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_YEAR;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class TagCommand extends Command {
             + PREFIX_TAG_MAJOR + "CS "
             + PREFIX_TAG_GENDER + "he/him";
 
-    public static final String MESSAGE_SUCCESS = "Added Tag to Resident: %1$s";
+    public static final String MESSAGE_SUCCESS = "Updated Tag for Resident: %1$s";
     public static final String MESSAGE_TAG_NOT_ADDED =
             "At least one tag must be provided.";
 
@@ -57,7 +58,7 @@ public class TagCommand extends Command {
         }
 
         this.targetStudentId = studentId;
-        this.tags = tags;
+        this.tags = Collections.unmodifiableMap(tags);
     }
 
     @Override
@@ -79,10 +80,17 @@ public class TagCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code taggedPerson}
      */
     private static Person createTaggedPerson(Person personToTag, Map<TagType, Tag> tags) {
+        HashMap<TagType, Tag> updatedTags = new HashMap<>(personToTag.getTags());
 
-        HashMap<TagType, Tag> updatedTags = new HashMap<>(personToTag.getTags()); // Start with existing tags
-        updatedTags.putAll(tags); // add new tags, overwriting any existing tags of the SAME type
+        tags.forEach((type, tag) -> {
+            if (tag == null) {
+                updatedTags.remove(type); // flush the tag
+            } else {
+                updatedTags.put(type, tag);
+            }
+        });
 
+        assert updatedTags.size() <= TagType.values().length : "Cannot exceed number of TagTypes";
         return new Person(
                 personToTag.getName(),
                 personToTag.getPhone(),

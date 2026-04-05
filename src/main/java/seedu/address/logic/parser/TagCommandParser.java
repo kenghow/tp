@@ -7,6 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import seedu.address.logic.commands.TagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -33,10 +34,7 @@ public class TagCommandParser implements Parser<TagCommand> {
      */
     public TagCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, PREFIX_STUDENT_ID,
-                CliSyntax.PREFIX_TAG_GENDER,
-                CliSyntax.PREFIX_TAG_MAJOR,
-                CliSyntax.PREFIX_TAG_YEAR);
+        ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, ALL_PREFIXES);
 
         ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, ALL_PREFIXES);
 
@@ -54,13 +52,11 @@ public class TagCommandParser implements Parser<TagCommand> {
 
     private Map<TagType, Tag> parseTags(ArgumentMultimap argumentMultimap) throws ParseException {
         Map<TagType, Tag> tags = new HashMap<>();
+
         try {
-            argumentMultimap.getValue(CliSyntax.PREFIX_TAG_GENDER)
-                    .ifPresent(gender -> tags.put(TagType.GENDER, new Tag(TagType.GENDER, gender)));
-            argumentMultimap.getValue(CliSyntax.PREFIX_TAG_MAJOR)
-                    .ifPresent(major -> tags.put(TagType.MAJOR, new Tag(TagType.MAJOR, major)));
-            argumentMultimap.getValue(CliSyntax.PREFIX_TAG_YEAR)
-                    .ifPresent(year -> tags.put(TagType.YEAR, new Tag(TagType.YEAR, year)));
+            putTagIfPresent(tags, argumentMultimap.getValue(CliSyntax.PREFIX_TAG_GENDER), TagType.GENDER);
+            putTagIfPresent(tags, argumentMultimap.getValue(CliSyntax.PREFIX_TAG_MAJOR), TagType.MAJOR);
+            putTagIfPresent(tags, argumentMultimap.getValue(CliSyntax.PREFIX_TAG_YEAR), TagType.YEAR);
         } catch (IllegalArgumentException e) {
             throw new ParseException(e.getMessage());
         }
@@ -68,6 +64,12 @@ public class TagCommandParser implements Parser<TagCommand> {
         if (tags.isEmpty()) {
             throw new ParseException(TagCommand.MESSAGE_TAG_NOT_ADDED);
         }
+
         return tags;
     }
+
+    private void putTagIfPresent(Map<TagType, Tag> tags, Optional<String> value, TagType type) {
+        value.ifPresent(v -> tags.put(type, v.isEmpty() ? null : new Tag(type, v)));
+    }
+
 }

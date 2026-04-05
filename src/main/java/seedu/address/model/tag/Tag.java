@@ -4,8 +4,15 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a Tag in the address book.
- * Guarantees: immutable; name is valid as declared in
+ * Represents a Tag in the hall ledger.
+ *
+ * <p>Each tag has a {@link TagType} that determines what content is valid for it.
+ * Supported tag types include gender pronouns ({@link TagType#GENDER}),
+ * academic major ({@link TagType#MAJOR}), and year of study ({@link TagType#YEAR}).
+ *
+ * <p>Gender tags are case-insensitive and are normalised to lowercase upon construction.
+ *
+ * <p>Guarantees: immutable; tag content is validated against its {@link TagType} upon construction.
  */
 public class Tag {
 
@@ -20,7 +27,7 @@ public class Tag {
      * Constructs a {@code Tag}.
      *
      * @param tagType The type of the tag.
-     * @param tagContent A valid tag name.
+     * @param tagContent valid tag content.
      */
     public Tag(TagType tagType, String tagContent) {
         requireNonNull(tagType);
@@ -33,28 +40,31 @@ public class Tag {
     }
 
     /**
-     * Returns true if a given string is a valid tag name.
+     * Checks if the given string is valid content for the specified {@link TagType}.
+     *
+     * <p>The content is normalised (e.g., lowercased for gender tags) before validation
+     *
+     * @param test the tag content string to validate;
+     * @param type the {@link TagType} whose rules the content is validated against;
+     * @return {@code true} if {@code test} is valid for {@code type}, {@code false} otherwise
      */
     public static boolean isValidTagContent(String test, TagType type) {
         requireNonNull(type);
-        return type.isValidTagName(getNormalisedTagContent(test, type));
+        return type.isValidTagContent(getNormalisedTagContent(test, type));
     }
 
+    /**
+     * Returns the normalised form of the given {@link String} for the specified {@link TagType}.
+     */
     public static String getNormalisedTagContent(String test, TagType type) {
         // check for gender as it is the only case-insensitive tag type
         return type == TagType.GENDER ? test.toLowerCase() : test;
     }
 
-    /**
-     * @return the tag name of this tag.
-     */
     public String getTagName() {
         return tagName;
     }
 
-    /**
-     * @return the tag type of this tag.
-     */
     public TagType getTagType() {
         return tagType;
     }
@@ -75,9 +85,7 @@ public class Tag {
         return tagName.hashCode();
     }
 
-    /**
-     * Format state as text for viewing.
-     */
+    @Override
     public String toString() {
         return '[' + tagName + ']';
     }

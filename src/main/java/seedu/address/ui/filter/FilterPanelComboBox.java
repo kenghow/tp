@@ -30,19 +30,26 @@ public class FilterPanelComboBox extends AbstractFilterPanelInput {
         requireNonNull(promptText);
         requireNonNull(choices);
 
-        keywordComboBox.setPromptText(promptText);
+        // It is noticed that ComboBox does not support prompt text when it is non-editable, so when we clear the
+        // selection or when no selection is made, it is not possible to show the prompt text again.
+
+        // Hence, let's disable prompt text for now to avoid confusion, and we can consider adding a label to show
+        // the prompt text if needed.
+        keywordComboBox.setPromptText("");
         keywordComboBox.getItems().setAll(choices);
     }
 
+    // Handles user selection from the combo box, adds the keyword and clears the selection for the next input.
     @FXML
     private void handleChoiceSelected() {
         tryAddKeyword(keywordComboBox.getValue());
     }
 
+    // Clears the combo box
     @Override
     protected void clearInputControl() {
-        keywordComboBox.setValue(null);
         keywordComboBox.getSelectionModel().clearSelection();
+        keywordComboBox.setValue(null);
     }
 }
 

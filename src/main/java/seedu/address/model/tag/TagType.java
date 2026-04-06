@@ -24,7 +24,7 @@ public enum TagType {
      * Valid content is an alphanumeric string; internal spaces between words are permitted,
      * but leading and trailing spaces are not.
      */
-    MAJOR(null, "[A-Za-z0-9]+( [A-Za-z0-9]+)*"),
+    MAJOR(null, "[A-Za-z0-9&]+( [A-Za-z0-9&]+)*"),
 
     /**
      * Tag representing the resident's gender pronouns.

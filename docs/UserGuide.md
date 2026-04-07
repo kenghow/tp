@@ -302,22 +302,30 @@ If the command format is invalid, HallLedger will show an error message instead 
 
 ![Delete confirmation dialog](images/deleteConfirmation.png)
 
-### Clearing all entries : `clear`
+### Clearing all residents : `clear`
 
-Clears all entries from the address book.
+Clears all residents from the address book.
 
-Format: `clear`
+Command: `clear`
+
+<box type="warning" seamless>
+
+**Caution:**
+HallLedger immediately deletes all residents. We recommend creating a backup of your data file before running this command, as the deletion cannot be undone. For details on backing up and editing the data file, please refer to the [Editing the data file](#editing-the-data-file) section below.
+</box>
+
 
 ### Exiting the program : `exit`
 
 Exits the program.
 
-Format: `exit`
+Command: `exit`
 
 ### Saving the data
 
-HallLedger data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+HallLedger automatically saves your data on your device whenever you make changes. There is no need to manually save your work.
 
+When you exit the program and open it again later, all your data will still be available.
 ### Editing the data file
 
 HallLedger data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
@@ -328,9 +336,9 @@ HallLedger data are saved automatically as a JSON file `[JAR file location]/data
 If your changes to the data file make its format invalid, HallLedger will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause HallLedger to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
-For more details on editing the JSON file, please refer to our [Developer Guide](DeveloperGuide.md) 
-
 </box>
+
+For more details on editing the JSON file, please refer to our [Developer Guide](DeveloperGuide.md)
 
 ### Archiving data files `[coming in v2.0]`
 

@@ -17,8 +17,8 @@ import seedu.address.model.person.StudentId;
 public class RemarkCommandParser implements Parser<RemarkCommand> {
 
     private static final Prefix[] ALL_PREFIXES = {
-            PREFIX_STUDENT_ID,
-            PREFIX_REMARK
+        PREFIX_STUDENT_ID,
+        PREFIX_REMARK
     };
 
     /**
@@ -32,7 +32,7 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
         requireNonNull(args);
         ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, ALL_PREFIXES);
 
-        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args,ALL_PREFIXES);
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, ALL_PREFIXES);
 
         if (argumentMultimap.getValue(PREFIX_STUDENT_ID).isEmpty() || !argumentMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));

@@ -1,9 +1,9 @@
 package seedu.address.model.tag;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.List;
 import java.util.Optional;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Represents the category of a {@link Tag} in the hall ledger.

@@ -3,7 +3,10 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.TagCommand.MESSAGE_USAGE;
-import static seedu.address.logic.parser.CliSyntax.*;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_GENDER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_MAJOR;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_YEAR;
 
 import java.util.HashMap;
 import java.util.Map;

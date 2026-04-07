@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.TagCommand.MESSAGE_USAGE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_STUDENT_ID;
+import static seedu.address.logic.parser.CliSyntax.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,10 +29,10 @@ import seedu.address.model.tag.TagType;
 public class TagCommandParser implements Parser<TagCommand> {
 
     private static final Prefix[] ALL_PREFIXES = {
-        CliSyntax.PREFIX_STUDENT_ID,
-        CliSyntax.PREFIX_TAG_GENDER,
-        CliSyntax.PREFIX_TAG_MAJOR,
-        CliSyntax.PREFIX_TAG_YEAR
+        PREFIX_STUDENT_ID,
+        PREFIX_TAG_GENDER,
+        PREFIX_TAG_MAJOR,
+        PREFIX_TAG_YEAR
     };
 
     /**
@@ -44,6 +44,7 @@ public class TagCommandParser implements Parser<TagCommand> {
      */
     public TagCommand parse(String args) throws ParseException {
         requireNonNull(args);
+
         ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, ALL_PREFIXES);
 
         ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args, ALL_PREFIXES);
@@ -71,9 +72,9 @@ public class TagCommandParser implements Parser<TagCommand> {
         Map<TagType, Tag> tags = new HashMap<>();
 
         try {
-            putTagIfPresent(tags, argumentMultimap.getValue(CliSyntax.PREFIX_TAG_GENDER), TagType.GENDER);
-            putTagIfPresent(tags, argumentMultimap.getValue(CliSyntax.PREFIX_TAG_MAJOR), TagType.MAJOR);
-            putTagIfPresent(tags, argumentMultimap.getValue(CliSyntax.PREFIX_TAG_YEAR), TagType.YEAR);
+            putTagIfPresent(tags, argumentMultimap.getValue(PREFIX_TAG_GENDER), TagType.GENDER);
+            putTagIfPresent(tags, argumentMultimap.getValue(PREFIX_TAG_MAJOR), TagType.MAJOR);
+            putTagIfPresent(tags, argumentMultimap.getValue(PREFIX_TAG_YEAR), TagType.YEAR);
         } catch (IllegalArgumentException e) {
             throw new ParseException(e.getMessage());
         }

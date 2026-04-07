@@ -3,6 +3,8 @@ package seedu.address.model.tag;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Represents the category of a {@link Tag} in the hall ledger.
  *
@@ -24,7 +26,7 @@ public enum TagType {
      * Valid content is an alphanumeric string; internal spaces between words are permitted,
      * but leading and trailing spaces are not.
      */
-    MAJOR(null, "[A-Za-z&]+( [A-Za-z&]+)*"),
+    MAJOR(null, "^(?=.{1,100}$)[A-Za-z&]+( [A-Za-z&]+)*$"),
 
     /**
      * Tag representing the resident's gender pronouns.
@@ -48,17 +50,16 @@ public enum TagType {
      * @return true if {@code tagContent} is null or matches the validation regex, false otherwise.
      */
     public boolean isValidTagContent(String tagContent) {
-        if (tagContent == null) {
-            return true;
-        }
+        requireNonNull(tagContent);
 
         // Case 1: Use allowed values (closed set)
         if (allowedValues != null) {
             return allowedValues.contains(tagContent);
         }
 
-        if (this == MAJOR && tagContent.length() > 100) {
-            return false; // reject majors longer than 60 chars
+        // Defensive check: if allowedValues is null, validationRegex must be non-null
+        if (validationRegex == null) {
+            throw new IllegalStateException("TagType must have either allowedValues or validationRegex defined.");
         }
 
         // Case 2: Use regex (open set)

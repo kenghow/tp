@@ -16,6 +16,11 @@ import seedu.address.model.person.StudentId;
  */
 public class RemarkCommandParser implements Parser<RemarkCommand> {
 
+    private static final Prefix[] ALL_PREFIXES = {
+            PREFIX_STUDENT_ID,
+            PREFIX_REMARK
+    };
+
     /**
      * Parses the given {@code args} and returns a {@link RemarkCommand} for execution.
      *
@@ -25,20 +30,18 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
      */
     public RemarkCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, PREFIX_STUDENT_ID, PREFIX_REMARK);
-        ArgumentMultimap argumentMultimap =
-                ArgumentTokenizer.tokenize(args,
-                        CliSyntax.PREFIX_STUDENT_ID,
-                        CliSyntax.PREFIX_REMARK);
+        ParserUtil.checkForUnknownPrefixes(args, MESSAGE_USAGE, ALL_PREFIXES);
+
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(args,ALL_PREFIXES);
 
         if (argumentMultimap.getValue(PREFIX_STUDENT_ID).isEmpty() || !argumentMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
         }
 
-        argumentMultimap.verifyNoDuplicatePrefixesFor(PREFIX_STUDENT_ID, PREFIX_REMARK);
+        argumentMultimap.verifyNoDuplicatePrefixesFor(ALL_PREFIXES);
 
         StudentId studentId = ParserUtil.parseStudentId(argumentMultimap.getValue(PREFIX_STUDENT_ID).get());
-        Remark remark = new Remark(argumentMultimap.getValue(CliSyntax.PREFIX_REMARK).orElse(""));
+        Remark remark = new Remark(argumentMultimap.getValue(PREFIX_REMARK).orElse(""));
 
         return new RemarkCommand(studentId, remark);
     }

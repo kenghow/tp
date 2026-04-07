@@ -60,7 +60,7 @@ public class PersonCard extends UiPart<Region> {
         handleClickOnTextField();
 
         person.getTags().values().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagContent))
+                .sorted(Comparator.comparing(tag -> tag.getTagType()))
                 .forEach(tag -> tags.getChildren().add(
                         new Label(TagFormatter.formatTagValue(tag))
                 ));

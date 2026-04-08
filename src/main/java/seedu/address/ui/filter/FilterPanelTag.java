@@ -42,15 +42,4 @@ public class FilterPanelTag extends UiPart<Region> {
     private void handleDeleteTag(MouseEvent e) {
         onTagDelete.handle(tagLabel);
     }
-
-    /**
-     * Functional interface for handling the deletion of a tag.
-     *
-     * The interface's implementation is done in the {@link FilterPanelField}, and the callback is passed to this
-     * {@code FilterPanelTag} to be executed when the 'x' button is clicked.
-     */
-    @FunctionalInterface
-    public interface TagDeleteHandler {
-        void handle(String tagToDelete);
-    }
 }

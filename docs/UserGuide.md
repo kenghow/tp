@@ -26,7 +26,7 @@
 6. [Tagging a Resident](#6-tagging-a-resident)  
    6.1. [Adding or Editing Tags](#61-adding-or-editing-tags)  
    6.2. [Clearing Tags](#62-clearing-tags)
-7. [Adding a Remark to a Resident](#7-adding-a-remark-to-a-resident)  
+7. [Adding a Remark to a Resident](#7-adding-a-remark-remark)  
    7.1. [Adding or Editing a Remark](#71-adding-or-editing-a-remark)  
    7.2. [Clearing a Remark](#72-clearing-a-remark)
 8. [Adding a Demerit Record to a Resident](#8-adding-a-demerit-record-to-a-resident)  
@@ -214,21 +214,34 @@ For full matching behavior and examples, see [Fuzzy Matching Details](FuzzyMatch
 
 </box>
 
-### Adding a remark: `remark`
+### 7. Adding a remark: `remark`
 
-Adds a remark to an existing resident.
+Remarks are **optional short notes** that can be added to a resident’s profile.
+They can be used to store important information about the resident that does not fit into the other fields, such as allergies, medical conditions, or other special notes. 
 
-Format: `remark i=STUDENT_ID rm=REMARK`
+**Command:** `remark`
 
-* Remark can be viewed in the resident's profile tab.
-* If a remark already exists for the resident, it will be **overwritten** by the new remark.
-* Empty remark (`rm=`) will **clear** the existing remark.
+#### 7.1 Adding or Editing a Remark
+ 
+**Usage:** `remark i=STUDENT_ID rm=REMARK`
 
-Examples:
-* Add/update a remark:
-  `remark i=A1234567X rm=Allergic to peanuts`
-* Clear a remark:
-  `remark i=A1234567X rm=`
+- If a remark already exists for the resident, it will be **overwritten** by the new remark.
+- There is no character limit for remarks, but keeping them concise is recommended for readability.
+- Remarks can contain any content. However, avoid using special characters that may interfere with the command format (e.g., `=` or `i=`), as they may cause issues when editing or clearing remarks.
+
+Example usages:
+- `remark i=A1234567X rm=Allergic to peanuts`
+- `remark i=A1121212X rm=Has asthma, needs inhaler nearby`
+---
+
+#### 7.2 Clearing a Remark
+ 
+**Usage:** `remark i=STUDENT_ID rm=`
+
+- Providing an empty `rm=` field clears the existing remark for the specified resident.
+
+Example usage:
+- `remark i=A1121212X rm=`
 
 ### Listing demerit rules: `demeritlist`
 

@@ -1,12 +1,14 @@
 package seedu.address.ui.tab;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -17,21 +19,17 @@ import seedu.address.model.person.Person;
 import seedu.address.ui.UiPart;
 
 /**
- * Demerit Records component of the Student Details Tab.
+ * Displays the selected resident's total demerit points and demerit incident history.
  */
 public class DemeritRecords extends UiPart<Region> {
 
     private static final String FXML = "DemeritRecords.fxml";
-
-    private static final String BODY_CELL_STYLE =
-            "-fx-background-color: #2b2b2b; "
-                    + "-fx-border-color: #555555; "
-                    + "-fx-text-fill: white;";
-
-    private static final String WRAPPED_TEXT_STYLE =
-            "-fx-fill: white;";
+    private static final String TOTAL_POINTS_LABEL_PREFIX = "Total Demerit Points: ";
 
     private final ObservableValue<Person> selectedPerson;
+
+    @FXML
+    private Label totalPointsLabel;
 
     @FXML
     private TableView<DemeritRecordRow> demeritTableView;
@@ -49,22 +47,25 @@ public class DemeritRecords extends UiPart<Region> {
     private TableColumn<DemeritRecordRow, String> pointsColumn;
 
     /**
-     * Creates a {@code DemeritRecords} component bound to the selected person.
+     * Creates a demerit records panel bound to the currently selected resident.
+     *
+     * @param selectedPerson observable selected resident
      */
     public DemeritRecords(ObservableValue<Person> selectedPerson) {
         super(FXML);
         this.selectedPerson = selectedPerson;
         initialiseColumns();
         bindSelectionListener();
-        updateTable(selectedPerson.getValue());
+        updateView(selectedPerson.getValue());
     }
 
     /**
-     * Sets up the table columns.
+     * Initialises the table columns and their corresponding cell factories.
      */
     private void initialiseColumns() {
         indexColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().index()));
+        indexColumn.setComparator(Comparator.comparingInt(Integer::parseInt));
 
         descriptionColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().description()));
@@ -74,6 +75,7 @@ public class DemeritRecords extends UiPart<Region> {
 
         pointsColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().points()));
+        pointsColumn.setComparator(Comparator.comparingInt(points -> Integer.parseInt(points.replace("+", ""))));
 
         indexColumn.setCellFactory(column -> createCenteredCell());
         pointsColumn.setCellFactory(column -> createCenteredCell());
@@ -82,15 +84,18 @@ public class DemeritRecords extends UiPart<Region> {
     }
 
     /**
-     * Creates a table cell that wraps long text instead of truncating it with ellipsis.
+     * Returns a table cell that wraps long text instead of truncating it.
+     *
+     * @return a wrapping table cell
      */
     private TableCell<DemeritRecordRow, String> createWrappingCell() {
         return new TableCell<>() {
             private final Text text = new Text();
 
             {
+                getStyleClass().add("demerit-record-body-cell");
                 text.wrappingWidthProperty().bind(widthProperty().subtract(16));
-                text.setStyle(WRAPPED_TEXT_STYLE);
+                text.getStyleClass().add("demerit-record-wrapped-text");
                 setGraphic(text);
                 setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -103,21 +108,25 @@ public class DemeritRecords extends UiPart<Region> {
                 if (empty || item == null) {
                     text.setText(null);
                     setGraphic(null);
-                    setStyle("");
                 } else {
                     text.setText(item);
                     setGraphic(text);
-                    setStyle(BODY_CELL_STYLE);
                 }
             }
         };
     }
 
     /**
-     * Creates a centered white-text cell for short values such as index and points.
+     * Returns a centered table cell for short values such as row numbers and point totals.
+     *
+     * @return a centered table cell
      */
     private TableCell<DemeritRecordRow, String> createCenteredCell() {
         return new TableCell<>() {
+            {
+                getStyleClass().addAll("demerit-record-body-cell", "demerit-record-centered-cell");
+            }
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -125,24 +134,44 @@ public class DemeritRecords extends UiPart<Region> {
                 if (empty || item == null) {
                     setText(null);
                     setGraphic(null);
-                    setStyle("");
                 } else {
                     setText(item);
-                    setStyle(BODY_CELL_STYLE + " -fx-alignment: CENTER; -fx-text-fill: white;");
                 }
             }
         };
     }
 
     /**
-     * Updates the table whenever the selected person changes.
+     * Binds the panel to changes in the selected resident.
      */
     private void bindSelectionListener() {
-        selectedPerson.addListener((observable, oldValue, newValue) -> updateTable(newValue));
+        selectedPerson.addListener((observable, oldValue, newValue) -> updateView(newValue));
     }
 
     /**
-     * Rebuilds the table rows for the given person.
+     * Updates the summary label and incident table for the given resident.
+     *
+     * @param person currently selected resident
+     */
+    private void updateView(Person person) {
+        updateTotalPointsLabel(person);
+        updateTable(person);
+    }
+
+    /**
+     * Updates the total demerit points label for the given resident.
+     *
+     * @param person currently selected resident
+     */
+    private void updateTotalPointsLabel(Person person) {
+        int totalPoints = person == null ? 0 : person.getTotalDemeritPoints();
+        totalPointsLabel.setText(TOTAL_POINTS_LABEL_PREFIX + totalPoints);
+    }
+
+    /**
+     * Rebuilds the demerit incident table for the given resident.
+     *
+     * @param person currently selected resident
      */
     private void updateTable(Person person) {
         demeritTableView.getItems().clear();
@@ -168,7 +197,10 @@ public class DemeritRecords extends UiPart<Region> {
     }
 
     /**
-     * Formats a readable description for one demerit incident.
+     * Returns a readable description for the given demerit incident.
+     *
+     * @param incident incident to describe
+     * @return formatted incident description
      */
     private String formatDescription(DemeritIncident incident) {
         return String.format("[%d] %s (offence %d)",
@@ -178,7 +210,7 @@ public class DemeritRecords extends UiPart<Region> {
     }
 
     /**
-     * Table row model for demerit records.
+     * Represents one row in the demerit records table.
      */
     private record DemeritRecordRow(String index, String description, String remark, String points) {
     }

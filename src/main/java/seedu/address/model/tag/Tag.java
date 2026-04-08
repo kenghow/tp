@@ -3,58 +3,63 @@ package seedu.address.model.tag;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Objects;
+
 /**
- * Represents a Tag in the address book.
- * Guarantees: immutable; name is valid as declared in
+ * Represents a Tag in the hall ledger.
+ *
+ * <p>Each tag has a {@link TagType} that determines what content is valid for it.
+ * Supported tag types include gender pronouns ({@link TagType#GENDER}),
+ * academic major ({@link TagType#MAJOR}), and year of study ({@link TagType#YEAR}).
+ *
+ * <p>Gender tags are case-insensitive and are normalised to lowercase upon construction.
+ *
+ * <p>Guarantees: immutable; tag content is validated against its {@link TagType} upon construction.
  */
 public class Tag {
 
     public static final String MESSAGE_CONSTRAINTS = "Tags names should be alphanumeric. "
             + "\nGender tags can be: she/her, he/him or they/them"
-            + "\nYear tags should be a positive integer between 1 and 6 inclusive.";
+            + "\nYear tags should be a positive integer between 1 and 6 inclusive."
+            + "\nMajor tags should be less than 100 characters long.";
 
-    public final String tagName;
-    public final TagType tagType;
+    private final String tagContent;
+    private final TagType tagType;
 
     /**
      * Constructs a {@code Tag}.
      *
      * @param tagType The type of the tag.
-     * @param tagName A valid tag name.
+     * @param tagContent valid tag content.
      */
-    public Tag(TagType tagType, String tagName) {
-        requireNonNull(tagName);
-        requireNonNull(tagName);
+    public Tag(TagType tagType, String tagContent) {
+        requireNonNull(tagType);
+        requireNonNull(tagContent);
 
-        checkArgument(isValidTagName(tagName, tagType), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidTagContent(tagContent, tagType), MESSAGE_CONSTRAINTS);
 
-        this.tagName = getNormalisedTagName(tagName, tagType);
+        this.tagContent = tagContent;
         this.tagType = tagType;
     }
 
     /**
-     * Returns true if a given string is a valid tag name.
+     * Checks if the given string is valid content for the specified {@link TagType}.
+     *
+     * <p>The content is normalised (e.g., lowercased for gender tags) before validation
+     *
+     * @param test the tag content string to validate;
+     * @param type the {@link TagType} whose rules the content is validated against;
+     * @return {@code true} if {@code test} is valid for {@code type}, {@code false} otherwise
      */
-    public static boolean isValidTagName(String test, TagType type) {
+    public static boolean isValidTagContent(String test, TagType type) {
         requireNonNull(type);
-        return type.isValidTagName(getNormalisedTagName(test, type));
+        return type.isValidTagContent(test);
     }
 
-    public static String getNormalisedTagName(String test, TagType type) {
-        // check for gender as it is the only case-insensitive tag type
-        return type == TagType.GENDER ? test.toLowerCase() : test;
+    public String getTagContent() {
+        return tagContent;
     }
 
-    /**
-     * @return the tag name of this tag.
-     */
-    public String getTagName() {
-        return tagName;
-    }
-
-    /**
-     * @return the tag type of this tag.
-     */
     public TagType getTagType() {
         return tagType;
     }
@@ -67,19 +72,17 @@ public class Tag {
         if (!(other instanceof Tag otherTag)) {
             return false;
         }
-        return tagType == otherTag.tagType && tagName.equals(otherTag.tagName);
+        return tagType == otherTag.tagType && tagContent.equals(otherTag.tagContent);
     }
 
     @Override
     public int hashCode() {
-        return tagName.hashCode();
+        return Objects.hash(tagType, tagContent);
     }
 
-    /**
-     * Format state as text for viewing.
-     */
+    @Override
     public String toString() {
-        return '[' + tagName + ']';
+        return '[' + tagContent + ']';
     }
 
 }

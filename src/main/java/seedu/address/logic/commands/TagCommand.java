@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_GENDER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_MAJOR;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG_YEAR;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +20,7 @@ import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagType;
 
 /**
- * Adds a tag to a resident in the address book.
- * Existing tags will be overwritten by the newly provided tags.
+ * Adds a tag to a resident identified using unique StudentId.
  */
 public class TagCommand extends Command {
 
@@ -38,7 +38,7 @@ public class TagCommand extends Command {
             + PREFIX_TAG_MAJOR + "CS "
             + PREFIX_TAG_GENDER + "he/him";
 
-    public static final String MESSAGE_SUCCESS = "Added Tag to Resident: %1$s";
+    public static final String MESSAGE_SUCCESS = "Updated Tag for Resident: %1$s";
     public static final String MESSAGE_TAG_NOT_ADDED =
             "At least one tag must be provided.";
 
@@ -46,18 +46,17 @@ public class TagCommand extends Command {
     private final Map<TagType, Tag> tags;
 
     /**
-     * Creates a tag command.
+     * Creates a {@code TagCommand} to add the specified {@code tags}
+     * to the resident identified by the given {@code StudentId}.
      */
     public TagCommand(StudentId studentId, Map<TagType, Tag> tags) {
         requireNonNull(studentId);
         requireNonNull(tags);
 
-        if (tags.isEmpty()) {
-            throw new IllegalArgumentException(MESSAGE_TAG_NOT_ADDED);
-        }
+        assert !tags.isEmpty() : "Tags should not be empty (should be caught by parser)";
 
         this.targetStudentId = studentId;
-        this.tags = tags;
+        this.tags = Collections.unmodifiableMap(tags);
     }
 
     @Override
@@ -65,7 +64,6 @@ public class TagCommand extends Command {
         requireNonNull(model);
 
         Person personToTag = getPersonByStudentIdOrThrow(model, targetStudentId);
-
         Person taggedPerson = createTaggedPerson(personToTag, tags);
 
         model.setPerson(personToTag, taggedPerson);
@@ -76,13 +74,15 @@ public class TagCommand extends Command {
     }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code taggedPerson}
+     * Creates and returns a new {@code Person} with the specified tags.
+     * All other fields remain unchanged.
+     *
+     * @param personToTag the original resident whose details are to be copied.
+     * @param tags the new tags to assign to the resident.
+     * @return a new {@code Person} instance with the updated tags.
      */
     private static Person createTaggedPerson(Person personToTag, Map<TagType, Tag> tags) {
-
-        HashMap<TagType, Tag> updatedTags = new HashMap<>(personToTag.getTags()); // Start with existing tags
-        updatedTags.putAll(tags); // add new tags, overwriting any existing tags of the SAME type
-
+        Map<TagType, Tag> updatedTags = computeUpdatedTags(personToTag.getTags(), tags);
         return new Person(
                 personToTag.getName(),
                 personToTag.getPhone(),
@@ -94,6 +94,29 @@ public class TagCommand extends Command {
                 updatedTags,
                 personToTag.getDemeritIncidents()
         );
+    }
+
+    /**
+     * Computes the updated tags by merging the existing tags with the new tags.
+     *
+     * @param existingTags the existing tags of the resident.
+     * @param newTags the new tags to be added or updated. Tags with null values indicate removal of that tag type.
+     * @return a new map containing the merged tags, where new tags overwrite existing tags of the same type,
+     *      and tags with null values in newTags are removed from the resulting map.
+     */
+    private static Map<TagType, Tag> computeUpdatedTags(Map<TagType, Tag> existingTags, Map<TagType, Tag> newTags) {
+
+        HashMap<TagType, Tag> updatedTags = new HashMap<>(existingTags);
+        newTags.forEach((type, tag) -> {
+            if (tag == null) {
+                updatedTags.remove(type); // Remove the tag if the new tag value is null
+            } else {
+                updatedTags.put(type, tag);
+            }
+        });
+
+        assert updatedTags.size() <= TagType.values().length : "Cannot exceed number of TagTypes";
+        return updatedTags;
     }
 
     @Override

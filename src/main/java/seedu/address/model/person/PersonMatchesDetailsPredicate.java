@@ -44,9 +44,9 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
         String personEmergencyContactString = person.getEmergencyContact().value;
 
         // Get the person's tag values as strings, or empty strings if the tags are not present
-        String personYearString = person.getYear().map(tag -> tag.getTagName()).orElse("");
-        String personMajorString = person.getMajor().map(tag -> tag.getTagName()).orElse("");
-        String personGenderString = person.getGender().map(tag -> tag.getTagName()).orElse("");
+        String personYearString = person.getYear().map(tag -> tag.getTagContent()).orElse("");
+        String personMajorString = person.getMajor().map(tag -> tag.getTagContent()).orElse("");
+        String personGenderString = person.getGender().map(tag -> tag.getTagContent()).orElse("");
 
         return isFuzzyMatch(personNameString, filterDetails.getNameKeywords())
                 && isFuzzyMatch(personEmailString, filterDetails.getEmailKeywords())
@@ -63,7 +63,7 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
      * Checks if the given {@code fieldValue} matches any of the {@code keywords} via fuzzy matching defined in
      * {@link StringUtil#fuzzyMatchesAnyIgnoreCase(String, Set)}.
      * <p>
-     * If the field value is empty, it will only match if the keywords are also empty.
+     * If the field value is empty, it will only match if the keywords are also empty (meaning non-existent).
      */
     private boolean isFuzzyMatch(String fieldValue, Set<String> keywords) {
         requireNonNull(keywords);
@@ -83,7 +83,7 @@ public class PersonMatchesDetailsPredicate implements Predicate<Person> {
      * Checks if any of the person's tags exactly match any of the {@code keywords} as defined in
      * {@link StringUtil#equalsAnyIgnoreCase(String, Set)}.
      * <p>
-     * If the field value is empty, it will only match if the keywords are also empty.
+     * If the field value is empty, it will only match if the keywords are also empty (meaning non-existent).
      */
     private boolean isExactMatch(String fieldValue, Set<String> keywords) {
         requireNonNull(fieldValue);

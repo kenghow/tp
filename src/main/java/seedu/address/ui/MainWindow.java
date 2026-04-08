@@ -20,7 +20,9 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.FilterDetails;
 
@@ -60,24 +62,34 @@ public class MainWindow extends UiPart<Stage> {
     private StackPane listSectionPlaceholder;
 
     /**
-     * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
+     * Creates a {@code MainWindow} with the given stage and logic component.
+     *
+     * @param primaryStage primary stage of the application
+     * @param logic logic component used to execute commands and retrieve state
      */
     public MainWindow(Stage primaryStage, Logic logic) {
         super(FXML, primaryStage);
 
+        // Set dependencies
         this.primaryStage = primaryStage;
         this.logic = logic;
 
+        // Configure the UI
         setWindowDefaultSize(logic.getGuiSettings());
+
         setAccelerators();
 
         helpWindow = new HelpWindow(primaryStage);
     }
 
     /**
-     * Sets the default size based on {@code guiSettings}.
+     * Sets the initial size and location of the main window using the given GUI settings.
+     *
+     * @param guiSettings saved GUI settings
      */
     private void setWindowDefaultSize(GuiSettings guiSettings) {
+        // If the saved window coordinates are not visible, move the window to the primary screen
+        // This can happen when the screen resolution is changed or when the app is opened on a different monitor
         if (hasVisibleWindowCoordinates(guiSettings)) {
             primaryStage.setX(guiSettings.getWindowCoordinates().getX());
             primaryStage.setY(guiSettings.getWindowCoordinates().getY());
@@ -87,10 +99,19 @@ public class MainWindow extends UiPart<Stage> {
         primaryStage.setMaximized(true);
     }
 
+    /**
+     * Registers keyboard accelerators for supported menu items.
+     */
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
     }
 
+    /**
+     * Returns whether the saved window coordinates are visible on one of the current screens.
+     *
+     * @param guiSettings saved GUI settings
+     * @return true if the saved coordinates are visible
+     */
     private boolean hasVisibleWindowCoordinates(GuiSettings guiSettings) {
         if (guiSettings.getWindowCoordinates() == null) {
             return false;
@@ -100,6 +121,9 @@ public class MainWindow extends UiPart<Stage> {
                 guiSettings.getWindowCoordinates().getY());
     }
 
+    /**
+     * Moves the main window to the primary screen.
+     */
     private void moveWindowToPrimaryScreen() {
         Rectangle2D primaryBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX(primaryBounds.getMinX());
@@ -107,13 +131,30 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Sets the accelerator of a MenuItem.
+     * Sets the accelerator of a menu item and ensures it still works
+     * when focus is inside a text input control.
      *
-     * @param keyCombination the KeyCombination value of the accelerator
+     * @param menuItem menu item receiving the accelerator
+     * @param keyCombination accelerator key combination
      */
     private void setAccelerator(MenuItem menuItem, KeyCombination keyCombination) {
         menuItem.setAccelerator(keyCombination);
 
+        /*
+         * TODO: the code below can be removed once the bug reported here
+         * https://bugs.openjdk.java.net/browse/JDK-8131666
+         * is fixed in later version of SDK.
+         *
+         * According to the bug report, TextInputControl (TextField, TextArea) will
+         * consume function-key events. Because CommandBox contains a TextField, and
+         * ResultDisplay contains a TextArea, thus some accelerators (e.g F1) will
+         * not work when the focus is in them because the key event is consumed by
+         * the TextInputControl(s).
+         *
+         * For now, we add following event filter to capture such key events and open
+         * help window purposely so to support accelerators even when focus is
+         * in CommandBox or ResultDisplay.
+         */
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
                 menuItem.getOnAction().handle(new ActionEvent());
@@ -122,6 +163,13 @@ public class MainWindow extends UiPart<Stage> {
         });
     }
 
+    /**
+     * Returns whether the specified screen coordinate is visible on any screen.
+     *
+     * @param x x-coordinate to check
+     * @param y y-coordinate to check
+     * @return true if the coordinate is visible
+     */
     private boolean isCoordinateVisible(double x, double y) {
         return Screen.getScreens().stream()
                 .map(Screen::getVisualBounds)
@@ -133,7 +181,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Fills up all the placeholders of this window.
+     * Fills all placeholders in this window with their corresponding UI parts.
      */
     void fillInnerParts() {
         ListSection listSection = new ListSection(logic, this::executeFilter);
@@ -153,7 +201,11 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Applies filters and updates the shared result display.
+     * Applies the given filter details and updates the shared result display.
+     *
+     * @param filterDetails filter details entered from the UI
+     * @return the result of applying the filter
+     * @throws CommandException if the filter operation fails
      */
     private CommandResult executeFilter(FilterDetails filterDetails) throws CommandException {
         try {
@@ -169,9 +221,12 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Executes the command and returns the result.
+     * Executes the given command text and updates the UI based on the result.
      *
-     * @see seedu.address.logic.Logic#execute(String)
+     * @param commandText raw command entered by the user
+     * @return the result of executing the command
+     * @throws CommandException if command execution fails
+     * @throws ParseException if command parsing fails
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
@@ -204,6 +259,8 @@ public class MainWindow extends UiPart<Stage> {
 
     /**
      * Shows a confirmation dialog before deleting a resident.
+     *
+     * @return true if the user confirms the deletion
      */
     private boolean showDeleteConfirmationDialog() {
         ButtonType confirmButton = new ButtonType("Confirm", ButtonBar.ButtonData.OK_DONE);
@@ -221,7 +278,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Opens the help window or focuses on it if it's already opened.
+     * Opens the help window, or focuses it if it is already open.
      */
     @FXML
     public void handleHelp() {
@@ -233,7 +290,7 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Closes the application.
+     * Saves the current GUI settings and closes the application.
      */
     @FXML
     private void handleExit() {
@@ -244,6 +301,9 @@ public class MainWindow extends UiPart<Stage> {
         primaryStage.hide();
     }
 
+    /**
+     * Shows the main application window.
+     */
     void show() {
         primaryStage.show();
     }

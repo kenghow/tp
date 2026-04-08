@@ -7,11 +7,44 @@
 # Hall Ledger User Guide
 
 **Hall Ledger (HL)** is a desktop application that helps **Resident Assistants (RAs) efficiently manage residents in NUS halls**. It is optimised for users who prefer typing commands, while still offering an intuitive visual interface for viewing resident data at a glance.
-
 <!-- * Table of Contents -->
-<page-nav-print />
+---
+## **Table of Contents**
 
---------------------------------------------------------------------------------------------------------------------
+1. [Quick Start](#quick-start)
+   1.1. [Installation Guide](installation-guide)
+   1.2. [Introduction to the Interface](introduction-to-the-interface)
+   1.3. [Brief Walkthrough](brief-walkthrough)
+2. [General Command Format](general-command-format)
+3. [Adding a Resident](#3-adding-a-resident)
+4. [Editing a Resident](#4-editing-a-resident)
+5. [Viewing Residents](#5-viewing-residents)
+    - [Listing All Residents](#51-listing-all-residents-list)
+    - [Finding Residents](#52-finding-residents-find)
+        - [Using the Command Line](#521-using-the-command-line)
+        - [Using the User Interface](#522-using-the-user-interface)
+6. [Tagging a Resident](#6-tagging-a-resident)
+   6.1. [Adding or Editing Tags](#61-adding-or-editing-tags)
+   6.2. [Clearing Tags](#62-clearing-tags)
+7. [Adding a Remark to a Resident](#7-adding-a-remark-remark)  
+   7.1. [Adding or Editing a Remark](#71-adding-or-editing-a-remark)  
+   7.2. [Clearing a Remark](#72-clearing-a-remark)
+8. [Adding a Demerit Record to a Resident](#8-adding-a-demerit-record-to-a-resident)
+   8.1. [Listing Demerit Rules](#81-listing-demerit-rules)
+   8.2. [Adding a Demerit Record](#82-adding-a-demerit-record)
+9. [Deleting a Resident](#9-deleting-a-resident)
+10. [Clearing All Residents](#10-clearing-all-entries)
+11. [Viewing Help](#11-viewing-help)
+12. [Exiting the Program](#12-exiting-the-program)
+13. [Saving the Data](#13-saving-the-data)
+14. [Editing the Data File](#14-editing-the-data-file)
+15. [Prefix Table](#15-prefix-table)
+16. [Format Errors](#16-format-errors)
+17. [FAQ](#17-faq)
+18. [Known Issues](#18-known-issues)
+19. [Command Summary](#command-summary)
+
+---
 
 ## Quick start
 
@@ -105,30 +138,30 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
-### Tagging a student: `tag`
+### Tagging a resident: `tag`
 
-Adds **Major**, **Year** and **Gender** tags to an existing student.
+Adds **Major**, **Year** and **Gender** tags to an existing resident.
 
 Format: `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`
 
-* Adds or edits tags for the student uniquely identified by *STUDENT_ID*.
+* Adds or edits tags for the resident uniquely identified by *STUDENT_ID*.
 * *STUDENT_ID* must be in a valid format and exist in the Hall Ledger
 * At least one of the optional tag fields (m=, y=, g=) must be provided.
 * Existing tags are replaced **(not cumulative)**.
-* Each student can have **at most** **one** Year, **one** Major, and **one** Gender tag at any time.
-* Re-tagging a student will **overwrite** previously assigned tags with the new values provided.
+* Each resident can have **at most** **one** Year, **one** Major, and **one** Gender tag at any time.
+* Re-tagging a resident will **overwrite** previously assigned tags with the new values provided.
 
 Examples:
 * `tag i=A0123456N y=Y3 m=Information Systems`: Assigns Year 3 and Information Systems as the student’s tags (any existing tags are replaced).
-* `tag i=A0101010X g=Female`: Updates the student’s Gender to Female and leaves other tags unchanged.
+* `tag i=A0101010X g=Female`: Updates the resident’s Gender to Female and leaves other tags unchanged.
 
 ### Editing a person : `edit`
 
-Edits an existing student in the _Hall Ledger_.
+Edits an existing resident in the _Hall Ledger_.
 
 Format: `edit STUDENT_ID [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`
 
-* Edits the student with the specified STUDENT_ID. STUDENT_ID is used to uniquely identify each student in the displayed student's list. The STUDENT_ID must be a valid student ID e.g. `A1234567X`.
+* Edits the resident with the specified STUDENT_ID. STUDENT_ID is used to uniquely identify each resident in the displayed resident's list. The STUDENT_ID must be a valid student ID e.g. `A1234567X`.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 
@@ -136,66 +169,121 @@ Examples:
 * `edit A1234567X p=91234567 e=johndoe@example.com` edits the phone number and email address of the resident with student ID `A1234567X` to be `91234567` and `johndoe@example.com` respectively.
 * `edit A8765432Y n=Betsy Crower ec=98765432` edits the name and emergency contact of the resident with student ID `A8765432Y` to be `Betsy Crower` and `98765432` respectively.
 
-### Locating persons: `find`
+### 5. Viewing Residents
 
-Finds residents using one or more fields such as name, phone, email, room, student ID, emergency contact, year, major, and gender.
+#### 5.1 Listing all residents: `list`
 
-***Using the command line***
+Use `list` to view all residents in the Hall Ledger. The residents would appear in the resident list panel on the
+right of the screen.
 
-Format: `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`
+Format: `list`
 
-* Matching ignores letter case, and field order does not matter.
-  * e.g. `find n=Alice y=Y1` gives the same result as `find y=Y1 n=ALICE`.
-* If you use different fields together, a resident must satisfy all of them.
-  * e.g. `find n=Alice p=9123 y=Y1` returns residents who match name, phone, and year.
-* If you repeat the same field, matching any one of those values is enough.
-  * e.g. `find y=Y2 y=Y3` returns residents in Year 2 or Year 3.
-  * e.g. `find n=Hans Bo n=Anna Lee` returns residents matching either `n=` value.
-* You can provide up to 10 values per field.
-* `g=GENDER` uses full-value matching (case-insensitive). Other fields use fuzzy-friendly matching.
+<box type="info">
+**Tip**: You may use the `list` command to reset the resident list after performing a search with the `find` command or 
+after using the Filter panel. This will allow you to see all residents again.
+</box>
 
-Examples:
+#### 5.2 Finding residents: `find`
 
-* `find n=John Doe` returns residents whose names match `John Doe`.
-* `find n=Alex n=David` returns residents matching either name value.
-* `find m=CS m=Economics g=Male g=Others` returns residents whose major is `CS` or `Economics`, and whose gender is `Male` or `Others`.
-* `find ec=+84 e=gmail` returns residents whose emergency contact matches `+84` and email matches `gmail`.
+Hall Ledger allows you to search for residents by various criteria such as name, phone number, email, room number,
+student ID, emergency contact, year, major, and gender. You can perform searches either through the command line or
+through the user interface.
 
-Result of running `find n=Alice Pauline` from the command line (matching resident(s) are shown in the list view):
+#### 5.2.1 Using the Command Line
 
-![Find Y2](images/find-y2.png)
+**Format:**
+`find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`
 
-***Using the user interface***
+**Example**
+Suppose you want to find all residents named "Alex":
 
-* Open the **Filter** panel to show the filter controls.
-* Enter one or more keywords in any field, then press Enter to apply the filter.
-* You can combine multiple keywords across multiple fields. The same matching behavior as the command-line `find`
-  applies.
-* To remove a keyword, click the `x` beside that keyword.
+* Type in the command box: `find n=Alex`
+* The resident list updates to show all residents whose names match "Alex"
 
-![Filled filter panel](images/filled-filter-panel.png)
+**Example: Finding residents with different prefixes**
+Suppose you want to find residents named "Alex" who are in Year 2. You can search for both criteria at once:
 
-<box type="info" seamless>
+* Type in the command box: `find n=Alex y=Y2`
+* The resident list updates to show only residents who match **both** the name "Alex" **and** Year 2
 
-For full matching behavior and examples, see [Fuzzy Matching Details](FuzzyMatching.md).
+**Example: Finding residents using multiple keywords within the same criterion**
+Suppose you want to find residents named "Alex" or "Bernice". You can search for multiple values within the same
+criterion by repeating that field:
+
+* Type in the command box: `find n=Alex n=Bernice`
+* The resident list updates to show only residents whose name match either "Alex" **or** Bernice
+
+#### 5.2.2 Using the User Interface
+
+You can also use the **Filter panel** to search using the user interface. The Filter panel supports the same matching
+behaviour as the command-line `find` command.
+
+**Steps:**
+
+1. Open the Filter panel (if it is collapsed).
+
+   ![Default filter panel](images/empty-filter-panel.png)
+
+2. Click on a filter field (e.g., "Search by Name"), then type a keyword.
+
+3. Press Enter to add the keyword. The resident list updates to show residents that match the keyword in that field.
+
+   ![Filter panel with one keyword](images/filter-panel-with-name-alex-and-bernice.png)
+
+4. Add more keywords if needed:
+    * Add more keywords in the same field to include residents that match any of the keywords in that field.
+    * Add keywords in other fields to limit results to residents that match the keywords in every field you used.
+
+5. To remove a keyword, click the `x` next to it.
+
+6. To clear the filter completely, remove all keywords from all fields or type 'list' in the command box.
+
+<box type="warning" seamless>
+
+Entering a command in the command box will reset the Filter panel.
 
 </box>
 
-### Adding a remark: `remark`
+<box type="info" seamless>
 
-Adds a remark to an existing resident.
+**Tips:**
 
-Format: `remark i=STUDENT_ID rm=REMARK`
+* Matching ignores letter case, and keyword order does not matter.
+* Using more than one filter field makes the results more specific.
+* Using more keywords in one field helps you find residents matching any of those keywords.
+* Hall Ledger supports fuzzy matching, so you can still find results even when you type a partial keyword or make a
+  small typo. For more details, see [Fuzzy Matching Details](FuzzyMatching.md).
 
-* Remark can be viewed in the resident's profile tab.
-* If a remark already exists for the resident, it will be **overwritten** by the new remark.
-* Empty remark (`rm=`) will **clear** the existing remark.
+</box>
 
-Examples:
-* Add/update a remark:
-  `remark i=A1234567X rm=Allergic to peanuts`
-* Clear a remark:
-  `remark i=A1234567X rm=`
+### 7. Adding a remark: `remark`
+
+Remarks are **optional short notes** that can be added to a resident’s profile.
+They can be used to store important information about the resident that does not fit into the other fields, such as allergies, medical conditions, or other special notes. 
+
+**Command:** `remark`
+
+#### 7.1 Adding or Editing a Remark
+ 
+**Usage:** `remark i=STUDENT_ID rm=REMARK`
+
+- If a remark already exists for the resident, it will be **overwritten** by the new remark.
+- There is no character limit for remarks, but keeping them concise is recommended for readability.
+- Remarks can contain any content. However, avoid using special characters that may interfere with the command format (e.g., `=` or `i=`), as they may cause issues when editing or clearing remarks.
+
+Example usages:
+- `remark i=A1234567X rm=Allergic to peanuts`
+- `remark i=A1121212X rm=Has asthma, needs inhaler nearby`
+---
+
+#### 7.2 Clearing a Remark
+ 
+**Usage:** `remark i=STUDENT_ID rm=`
+
+- Providing an empty `rm=` field clears the existing remark for the specified resident.
+
+Example usage:
+- `remark i=A1121212X rm=`
 
 ### Listing demerit rules: `demeritlist`
 
@@ -251,22 +339,30 @@ If the command format is invalid, HallLedger will show an error message instead 
 
 ![Delete confirmation dialog](images/deleteConfirmation.png)
 
-### Clearing all entries : `clear`
+### Clearing all residents : `clear`
 
-Clears all entries from the address book.
+Clears all residents from HallLedger all at once.
 
-Format: `clear`
+Command: `clear`
+
+<box type="warning" seamless>
+
+**Caution:**
+This action **permanently deletes all resident data**. We recommend creating a backup of your data file before running this command. Once cleared, the **deletion cannot be undone**.
+
+</box>
 
 ### Exiting the program : `exit`
 
 Exits the program.
 
-Format: `exit`
+Command: `exit`
 
 ### Saving the data
 
-HallLedger data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+HallLedger automatically saves your data on your device whenever you make changes. There is no need to manually save your work.
 
+When you exit the program and open it again later, all your data will still be available.
 ### Editing the data file
 
 HallLedger data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
@@ -279,9 +375,7 @@ Furthermore, certain edits can cause HallLedger to behave in unexpected ways (e.
 
 </box>
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
+For more details on editing the JSON file, please refer to our [Developer Guide](DeveloperGuide.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -293,8 +387,8 @@ _Details coming soon ..._
 **Q**: Can I edit the data file manually?  
 **A**: Yes. HallLedger stores data locally in a human-editable text file. However, manual edits should be done carefully, because invalid edits may prevent HallLedger from loading the data correctly.
 
-**Q**: How do I go back to seeing the list of all students after running `find`?  
-**A**: Run the `list` command to see the full list of students again.
+**Q**: How do I go back to seeing the list of all residents after running `find`?  
+**A**: Run the `list` command to see the full list of residents again.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -307,16 +401,16 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**[Add](#adding-a-person-add)** | `add n=NAME p=PHONE_NUMBER e=EMAIL i=STUDENT_ID r=ROOM_NUMBER ec=EMERGENCY_CONTACT` <br> e.g., `add n=James Lee p=+65 98765432 e=james@example.com i=A1234567X r=15R ec=+65 98765432`
-**[Clear](#clearing-all-entries--clear)** | `clear`
-**[Delete](#deleting-a-resident--delete)** | `delete i=STUDENT_ID`<br> e.g., `delete i=A1234567X`
-**[Edit](#editing-a-person--edit)** | `edit STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br> e.g., `edit A1234567X n=James Lee e=jameslee@example.com`
-**[Tag](#tagging-a-student-tag)** | `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`<br> e.g., `tag i=A1234567X m=CS y=Y3`
-**[Find](#locating-persons-find)** | `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`<br> e.g., `find n=James y=Y1`
-**[Remark](#adding-a-remark-remark)** | `remark i=STUDENT_ID rm=REMARK`<br> e.g., `remark i=A1234567X rm=Allergic to peanuts`
-**[Demerit List](#listing-demerit-rules-demeritlist)** | `demeritlist`
-**[Add Demerit](#adding-a-demerit-record-demerit)** | `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`<br> e.g., `demerit i=A1234567X di=18 rm=Visitor during quiet hours`
-**[List](#listing-all-persons-list)** | `list`
-**[Help](#viewing-help--help)** | `help`
+| Action                                                 | Format, Examples                                                                                                                                                                    |
+|--------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **[Add](#adding-a-person-add)**                        | `add n=NAME p=PHONE_NUMBER e=EMAIL i=STUDENT_ID r=ROOM_NUMBER ec=EMERGENCY_CONTACT`<br>e.g., `add n=James Lee p=+65 98765432 e=james@example.com i=A1234567X r=15R ec=+65 98765432` |
+| **[Clear](#clearing-all-residents--clear)**            | `clear`                                                                                                                                                                             |
+| **[Delete](#deleting-a-resident--delete)**             | `delete i=STUDENT_ID`<br>e.g., `delete i=A1234567X`                                                                                                                                 |
+| **[Edit](#editing-a-person--edit)**                    | `edit STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br>e.g., `edit A1234567X n=James Lee e=jameslee@example.com`                           |
+| **[Tag](#tagging-a-student-tag)**                      | `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`<br>e.g., `tag i=A1234567X m=CS y=Y3`                                                                                               |
+| **[Find](#finding-residents-find)**                    | `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`<br>e.g., `find n=James y=Y1`                                |
+| **[Remark](#adding-a-remark-remark)**                  | `remark i=STUDENT_ID rm=REMARK`<br>e.g., `remark i=A1234567X rm=Allergic to peanuts`                                                                                                |
+| **[Demerit List](#listing-demerit-rules-demeritlist)** | `demeritlist`                                                                                                                                                                       |
+| **[Add Demerit](#adding-a-demerit-record-demerit)**    | `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`<br>e.g., `demerit i=A1234567X di=18 rm=Visitor during quiet hours`                                                                 |
+| **[List](#listing-all-residents-list)**                | `list`                                                                                                                                                                              |
+| **[Help](#viewing-help--help)**                        | `help`                                                                                                                                                                              |

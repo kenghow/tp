@@ -68,5 +68,5 @@ EmergencyContact -[hidden]down-> Remark
 Remark -[hidden]right-> Tag
 Tag -[hidden]right-> DemeritIncident
 
-ModelManager --> "~* filtered" Person
+ModelManager --> "~* filtered\n\n" Person
 @enduml

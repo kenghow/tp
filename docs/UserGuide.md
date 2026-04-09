@@ -105,14 +105,6 @@
 
 </box>
 
-### Viewing help : `help`
-
-Opens the HallLedger Help window, which displays the available commands and their usage formats.
-
-Format: `help`
-
-Example:
-* `help`
 
 When the command is entered, HallLedger opens a Help window containing a quick reference list of supported commands. The Help window also includes a reference to the HallLedger User Guide for more detailed explanations.
 
@@ -312,7 +304,18 @@ Command: `clear`
 
 **Caution:**
 This action **permanently deletes all resident data**. We recommend creating a backup of your data file before running this command. Once cleared, the **deletion cannot be undone**.
+</box>
 
+### 11. Viewing help
+
+Opens the HallLedger Help window, which displays the available commands and their usage formats.
+
+Command: `help`
+<div align="center">
+<img src="images/help-window.png" alt="Help Window 2" width="500" align="center"/>      
+</div>
+<br>
+<br>
 
 ### Exiting the program : `exit`
 

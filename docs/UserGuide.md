@@ -159,15 +159,15 @@ Examples:
 
 Edits an existing resident in the _Hall Ledger_.
 
-Format: `edit STUDENT_ID [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`
+Format: `edit i=STUDENT_ID [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`
 
 * Edits the resident with the specified STUDENT_ID. STUDENT_ID is used to uniquely identify each resident in the displayed resident's list. The STUDENT_ID must be a valid student ID e.g. `A1234567X`.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 
 Examples:
-* `edit A1234567X p=91234567 e=johndoe@example.com` edits the phone number and email address of the resident with student ID `A1234567X` to be `91234567` and `johndoe@example.com` respectively.
-* `edit A8765432Y n=Betsy Crower ec=98765432` edits the name and emergency contact of the resident with student ID `A8765432Y` to be `Betsy Crower` and `98765432` respectively.
+* `edit i=A1234567X p=91234567 e=johndoe@example.com` edits the phone number and email address of the resident with student ID `A1234567X` to be `91234567` and `johndoe@example.com` respectively.
+* `edit i=A8765432Y n=Betsy Crower ec=98765432` edits the name and emergency contact of the resident with student ID `A8765432Y` to be `Betsy Crower` and `98765432` respectively.
 
 ### 5. Viewing Residents
 
@@ -406,7 +406,7 @@ For more details on editing the JSON file, please refer to our [Developer Guide]
 | **[Add](#adding-a-person-add)**                        | `add n=NAME p=PHONE_NUMBER e=EMAIL i=STUDENT_ID r=ROOM_NUMBER ec=EMERGENCY_CONTACT`<br>e.g., `add n=James Lee p=+65 98765432 e=james@example.com i=A1234567X r=15R ec=+65 98765432` |
 | **[Clear](#clearing-all-residents--clear)**            | `clear`                                                                                                                                                                             |
 | **[Delete](#deleting-a-resident--delete)**             | `delete i=STUDENT_ID`<br>e.g., `delete i=A1234567X`                                                                                                                                 |
-| **[Edit](#editing-a-person--edit)**                    | `edit STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br>e.g., `edit A1234567X n=James Lee e=jameslee@example.com`                           |
+| **[Edit](#editing-a-person--edit)**                    | `edit i=STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br>e.g., `edit A1234567X n=James Lee e=jameslee@example.com`                           |
 | **[Tag](#tagging-a-student-tag)**                      | `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`<br>e.g., `tag i=A1234567X m=CS y=Y3`                                                                                               |
 | **[Find](#finding-residents-find)**                    | `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`<br>e.g., `find n=James y=Y1`                                |
 | **[Remark](#adding-a-remark-remark)**                  | `remark i=STUDENT_ID rm=REMARK`<br>e.g., `remark i=A1234567X rm=Allergic to peanuts`                                                                                                |

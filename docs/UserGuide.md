@@ -39,12 +39,10 @@
 12. [Viewing Help](#12-viewing-help)  
 13. [Exiting the Program](#13-exiting-the-program)  
 14. [Saving the Data](#14-saving-the-data)  
-15. [Editing the Data File](#15-editing-the-data-file)  
-16. [Prefix Table](#16-prefix-table)  
-17. [Format Errors](#17-format-errors)  
-18. [FAQ](#18-faq)  
-19. [Known Issues](#19-known-issues)  
-20. [Command Summary](#20-command-summary)  
+15. [Editing the Data File](#15-editing-the-data-file)   
+16. [FAQ](#16-faq)  
+17. [Known Issues](#17-known-issues)  
+18. [Command Summary](#18-command-summary)  
 
 ---
 
@@ -130,18 +128,17 @@ Examples:
 
 Edits an existing resident in the _Hall Ledger_.
 
-Format: `edit STUDENT_ID [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`
+Format: `edit i=STUDENT_ID [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`
 
 * Edits the resident with the specified STUDENT_ID. STUDENT_ID is used to uniquely identify each resident in the displayed resident's list. The STUDENT_ID must be a valid student ID e.g. `A1234567X`.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 
 Examples:
-* `edit A1234567X p=91234567 e=johndoe@example.com` edits the phone number and email address of the resident with student ID `A1234567X` to be `91234567` and `johndoe@example.com` respectively.
-* `edit A8765432Y n=Betsy Crower ec=98765432` edits the name and emergency contact of the resident with student ID `A8765432Y` to be `Betsy Crower` and `98765432` respectively.
-
-</div>
-
+* `edit i=A1234567X p=91234567 e=johndoe@example.com` edits the phone number and email address of the resident with student ID `A1234567X` to be `91234567` and `johndoe@example.com` respectively.
+* `edit i=A8765432Y n=Betsy Crower ec=98765432` edits the name and emergency contact of the resident with student ID `A8765432Y` to be `Betsy Crower` and `98765432` respectively.
+ </div>
+ 
 ***
 
 <div class="section">
@@ -195,6 +192,7 @@ Example usage:
 ### 6. Viewing Residents
 
 Displays all residents the resident list panel on the right 
+
 
 **Command:** `list`
 
@@ -342,7 +340,7 @@ Example usage:
 
 #### 9.1 Listing Demerit Rules
 
-Shows the indexed demerit rules available in HallLedger.
+Shows the indexed demerit rules available in Hall Ledger.
 
 **Command:** `demeritlist`
 
@@ -359,9 +357,10 @@ Adds a demerit record to an existing resident.
 **Usage:** `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`
 
 * Applies the demerit rule identified by `RULE_INDEX` to the resident identified by `STUDENT_ID`.
-* `STUDENT_ID` must refer to an existing resident in HallLedger.
+* `STUDENT_ID` must refer to an existing resident in Hall Ledger.
 * `RULE_INDEX` must match one of the indexed rules shown by `demeritlist`.
-* If the same resident receives the same rule again, HallLedger automatically applies the next offence tier for that rule.
+* If the same resident receives the same rule again, Hall Ledger automatically applies the next offence tier for that
+  rule.
 * `rm=` is optional and can be used to store a short context note for that incident.
 * The resident’s displayed total demerit points will update after the command succeeds.
 
@@ -378,19 +377,21 @@ Examples:
 
 ### 10. Deleting a Resident
 
-Deletes the resident identified by student ID from HallLedger.
+Deletes the resident identified by student ID from Hall Ledger.
 
 Format: `delete i=STUDENT_ID`
 
 Example:
 * `delete i=A0312075X`
 
-After a valid delete command is entered, HallLedger shows a confirmation dialog before the resident is actually removed.
+After a valid delete command is entered, Hall Ledger shows a confirmation dialog before the resident is actually
+removed.
 
 * Click **Confirm** to proceed with the deletion.
-* Click **Cancel** to stop the deletion. HallLedger will display the message `Deletion cancelled.` and no resident will be removed.
+* Click **Cancel** to stop the deletion. Hall Ledger will display the message `Deletion cancelled.` and no resident will
+  be removed.
 
-If the command format is invalid, HallLedger will show an error message instead of opening the confirmation dialog.
+If the command format is invalid, Hall Ledger will show an error message instead of opening the confirmation dialog.
 
 ![Delete confirmation dialog](images/deleteConfirmation.png)
 
@@ -402,7 +403,7 @@ If the command format is invalid, HallLedger will show an error message instead 
 
 ### 11. Clearing all Residents
 
-Clears all residents from HallLedger all at once.
+Clears all residents from Hall Ledger all at once.
 
 Command: `clear`
 
@@ -421,7 +422,7 @@ This action **permanently deletes all resident data**. We recommend creating a b
 
 ### 12. Viewing Help
 
-Opens the HallLedger Help window, which displays the available commands and their usage formats.
+Opens the Hall Ledger Help window, which displays the available commands and their usage formats.
 
 Command: `help`
 <div align="center">
@@ -450,7 +451,8 @@ Command: `exit`
 
 ### 14. Saving the Data
 
-HallLedger automatically saves your data on your device whenever you make changes. There is no need to manually save your work.
+Hall Ledger automatically saves your data on your device whenever you make changes. There is no need to manually save
+your work.
 
 When you exit the program and open it again later, all your data will still be available.
 
@@ -461,28 +463,14 @@ When you exit the program and open it again later, all your data will still be a
 <div class="section">
 
 ### 15. Editing the Data File
-
-HallLedger data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
-
-</div>
-
-***
-
-<div class="section">
-
-### 16. Prefix Table
-
-</div>
-
-***
-
-<div class="section">
-
-### 17. Format Errors
+Hall Ledger data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are
+welcome to update data directly by editing that data file.
 
 **Caution:**
-If your changes to the data file make its format invalid, HallLedger will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause HallLedger to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file make its format invalid, Hall Ledger will discard all data and start with an empty data
+file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause Hall Ledger to behave in unexpected ways (e.g., if a value entered is outside the
+acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
 
 For more details on editing the JSON file, please refer to our [Developer Guide](DeveloperGuide.md)
@@ -492,14 +480,15 @@ For more details on editing the JSON file, please refer to our [Developer Guide]
 --------------------------------------------------------------------------------------------------------------------
 
 <div class="section">
-
-### 18. FAQ
+### 16. FAQ
 
 **Q**: How do I transfer my data to another Computer?  
-**A**: Install the app on the other computer and overwrite the empty data file it creates with the file that contains the data of your previous HallLedger home folder.
+**A**: Install the app on the other computer and overwrite the empty data file it creates with the file that contains
+the data of your previous Hall Ledger home folder.
 
 **Q**: Can I edit the data file manually?  
-**A**: Yes. HallLedger stores data locally in a human-editable text file. However, manual edits should be done carefully, because invalid edits may prevent HallLedger from loading the data correctly.
+**A**: Yes. Hall Ledger stores data locally in a human-editable text file. However, manual edits should be done
+carefully, because invalid edits may prevent Hall Ledger from loading the data correctly.
 
 **Q**: How do I go back to seeing the list of all residents after running `find`?  
 **A**: Run the `list` command to see the full list of residents again.
@@ -510,9 +499,7 @@ For more details on editing the JSON file, please refer to our [Developer Guide]
 --------------------------------------------------------------------------------------------------------------------
 
 <div class="section">
-
-### 19. Known issues
-
+### 17. Known issues
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
@@ -521,21 +508,20 @@ For more details on editing the JSON file, please refer to our [Developer Guide]
 --------------------------------------------------------------------------------------------------------------------
 
 <div class="section">
-
-### 20. Command summary
+### 18. Command summary
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**[Add](#adding-a-person-add)** | `add n=NAME p=PHONE_NUMBER e=EMAIL i=STUDENT_ID r=ROOM_NUMBER ec=EMERGENCY_CONTACT` <br> e.g., `add n=James Lee p=+65 98765432 e=james@example.com i=A1234567X r=15R ec=+65 98765432`
-**[Clear](#clearing-all-entries--clear)** | `clear`
-**[Delete](#deleting-a-resident--delete)** | `delete i=STUDENT_ID`<br> e.g., `delete i=A1234567X`
-**[Edit](#editing-a-person--edit)** | `edit STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br> e.g., `edit A1234567X n=James Lee e=jameslee@example.com`
-**[Tag](#tagging-a-student-tag)** | `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`<br> e.g., `tag i=A1234567X m=CS y=Y3`
-**[Find](#locating-persons-find)** | `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`<br> e.g., `find n=James y=Y1`
-**[Remark](#adding-a-remark-remark)** | `remark i=STUDENT_ID rm=REMARK`<br> e.g., `remark i=A1234567X rm=Allergic to peanuts`
-**[Demerit List](#listing-demerit-rules-demeritlist)** | `demeritlist`
-**[Add Demerit](#adding-a-demerit-record-demerit)** | `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`<br> e.g., `demerit i=A1234567X di=18 rm=Visitor during quiet hours`
-**[List](#listing-all-persons-list)** | `list`
-**[Help](#viewing-help--help)** | `help`
-
+**[Add](#3-adding-a-resident)** | `add n=NAME p=PHONE_NUMBER e=EMAIL i=STUDENT_ID r=ROOM_NUMBER ec=EMERGENCY_CONTACT` <br> e.g., `add n=James Lee p=+65 98765432 e=james@example.com i=A1234567X r=15R ec=+65 98765432`
+**[Clear](#52-clearing-tags)** | `clear`
+**[Delete](#10-deleting-a-resident)** | `delete i=STUDENT_ID`<br> e.g., `delete i=A1234567X`
+**[Edit](#4-editing-a-resident)** | `edit i=STUDENT_ID [n=NAME] [p=PHONE_NUMBER] [e=EMAIL] [r=ROOM_NUMBER] [ec=EMERGENCY_CONTACT]`<br> e.g., `edit A1234567X n=James Lee e=jameslee@example.com`
+**[Tag](#51-adding-or-editing-tags)** | `tag i=STUDENT_ID [m=MAJOR] [y=YEAR] [g=GENDER]`<br> e.g., `tag i=A1234567X m=Computer Science y=3`
+**[Find](#7-finding-residents)** | `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`<br> e.g., `find n=James y=Y1`
+**[Remark](#81-adding-or-editing-a-remark)** | `remark i=STUDENT_ID rm=REMARK`<br> e.g., `remark i=A1234567X rm=Allergic to peanuts`
+**[Demerit List](#91-listing-demerit-rules)** | `demeritlist`
+**[Add Demerit](#92-adding-a-demerit-record)** | `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`<br> e.g., `demerit i=A1234567X di=18 rm=Visitor during quiet hours`
+**[List](#6-viewing-residents)** | `list`
+**[Help](#12-viewing-help)** | `help`
+  
 </div>

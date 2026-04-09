@@ -13,7 +13,7 @@ pageNav: 3
 
 ## **Acknowledgements**
 
-* Hall Ledger’s demerit rule catalogue is adapted from the NUS Office of Student Affairs **Demerit Point Structure (DPS)
+* Hall Ledger’s demerit rule catalogue is adapted from the NUS Office of resident Affairs **Demerit Point Structure (DPS)
   for Breach of Housing Agreement**, dated 9 January 2026.
 * This project is based on the **AddressBook-Level3 (AB3)** codebase from [se-education/addressbook-level3](https://github.com/se-edu/addressbook-level3).
 * dinhcodes has used co-pilot complete to help write some of the code in this project, as well as to answer 
@@ -231,7 +231,7 @@ The resident’s total demerit points are **derived** by summing the points appl
 The demerit feature is split into two user-facing commands:
 
 * `demeritlist` — displays the indexed demerit rule catalogue and point tiers.
-* `demerit` — applies an indexed demerit rule to a resident identified by student ID.
+* `demerit` — applies an indexed demerit rule to a resident identified by resident ID.
 
 #### Rationale for the current design
 
@@ -326,9 +326,9 @@ stated otherwise.
 
 **MSS**
 
-1. RA requests to add a new student, providing the student's details (e.g., name, phone, email, room number, tags).
-2. Hall Ledger adds the new student.
-3. Hall Ledger displays a success message with the added student's details.
+1. RA requests to add a new resident, providing the resident's details (e.g., name, phone, email, room number, tags).
+2. Hall Ledger adds the new resident.
+3. Hall Ledger displays a success message with the added resident's details.
 
 Use case ends.
 
@@ -338,44 +338,44 @@ Use case ends.
     * 1a1. Hall Ledger shows an error message indicating the correct format.
     Use case resumes from step 1.
 
-* 1b. A student with a provided unique identifier (Student ID, room) that already exists in the system.
+* 1b. A resident with a provided unique identifier (resident ID, room) that already exists in the system.
     * 1b1. Hall Ledger detects the duplicate entry and displays an errors message. Use case ends.
 
 * 1c. RA fails to provide compulsory details (name, phone, email, room number).
     * 1c1. Hall Ledger shows an error message indicating the compulsory details.
     Use case resumes from step 1.
 
-**Use case: UC02 - View a student's details (basic info, demerit records)**
+**Use case: UC02 - View a resident's details (basic info, demerit records)**
 
 **MSS**
 
-1. RA requests to list all students.
-2. Hall Ledger shows a list of students.
-3. RA identifies a specific student from the list.
-4. Hall Ledger displays the student's basic information and current demerit total in the UI.
+1. RA requests to list all residents.
+2. Hall Ledger shows a list of residents.
+3. RA identifies a specific resident from the list.
+4. Hall Ledger displays the resident's basic information and current demerit total in the UI.
 
 Use case ends.
 
 **Extensions**
 
-* 2a. The student list is empty.
-    * 2a1. Hall Ledger indicates that the student list is empty.
+* 2a. The resident list is empty.
+    * 2a1. Hall Ledger indicates that the resident list is empty.
     Use case ends.
 
-**Use case: UC03 - Edit a student's info**
+**Use case: UC03 - Edit a resident's info**
 
 **MSS**
 
-1. RA requests to edit specific details (e.g., phone, email, room number, tags) of a student using their student ID.
-2. Hall Ledger updates the student's details.
-3. Hall Ledger displays a success message with the updated student's details.
+1. RA requests to edit specific details (e.g., phone, email, room number, tags) of a resident using their resident ID.
+2. Hall Ledger updates the resident's details.
+3. Hall Ledger displays a success message with the updated resident's details.
 
 Use case ends.
 
 **Extensions**
 
-* 1a. The given student ID does not exist.
-    * 1a1. Hall Ledger shows an error message indicating that the student was not found.
+* 1a. The given resident ID does not exist.
+    * 1a1. Hall Ledger shows an error message indicating that the resident was not found.
     Use case ends.
 
 * 1b. RA provides an invalid format for the details to be updated.
@@ -385,32 +385,32 @@ Use case ends.
 * 1c. RA provides details that are exactly the same as the existing ones, resulting in no changes.
   Use case resumes from step 1.
 
-**Use case: UC04 - Delete or Clear student records**
+**Use case: UC04 - Delete or Clear resident records**
 
 **MSS**
 
-1. RA requests to delete a specific student or clear all current student records.
-2. Hall Ledger deletes the specified student or clears all data.
+1. RA requests to delete a specific resident or clear all current resident records.
+2. Hall Ledger deletes the specified resident or clears all data.
 3. Hall Ledger displays a success message reflecting the changes.
 
 Use case ends.
 
 **Extensions**
 
-* 1a. The student list is already empty.
+* 1a. The resident list is already empty.
   Use case ends.
 
-* 1b. If deleting, the given student ID is invalid.
+* 1b. If deleting, the given resident ID is invalid.
     * 1b1. Hall Ledger shows an error message.
     Use case resumes from step 1.
 
-**Use case: UC05 - Search and filter students**
+**Use case: UC05 - Search and filter residents**
 
 **MSS**
 
 1. RA requests to search by name or filter by specific attributes (e.g., room, year, tags).
 2. Hall Ledger processes the query.
-3. Hall Ledger shows a list of matching students.
+3. Hall Ledger shows a list of matching residents.
 
 Use case ends.
 
@@ -475,7 +475,7 @@ Use case ends.
 
 * **Resident**: A hall resident stored in Hall Ledger.
 * **RA**: Resident Assistant.
-* **Student ID**: The identifier used by Hall Ledger to target a resident.
+* **resident ID**: The identifier used by Hall Ledger to target a resident.
 * **Remark**: A short resident-level operational note.
 * **Demerit incident**: A single recorded rule breach applied to a resident.
 * **Demerit rule**: A rule in the demerit catalogue that can be applied using `demerit`.
@@ -602,7 +602,7 @@ Team size: 5
 
 6. Make repeated-demerit feedback more informative: Hall Ledger currently shows the applied rule, remark, points added, and updated total. We plan to also surface the offence number more prominently in the success feedback for easier verification.
 
-7. Improve messaging for invalid resident targeting: Commands such as `edit`, `remark`, and `demerit` reject nonexistent student IDs. We plan to standardize those error messages further so the reason for failure is even clearer to users.
+7. Improve messaging for invalid resident targeting: Commands such as `edit`, `remark`, and `demerit` reject nonexistent resident IDs. We plan to standardize those error messages further so the reason for failure is even clearer to users.
 
 8. Improve save-failure guidance for write-protected folders: Hall Ledger currently depends on write access to its home folder. We plan to provide clearer user-facing guidance when saving fails due to file-permission issues.
 

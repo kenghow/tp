@@ -50,7 +50,14 @@ public class Profile extends UiPart<Region> {
         super(FXML);
         selectedPerson.addListener((observable, oldValue, newValue) -> {
             if (newValue == null) {
-                return;
+                phoneField.setText("");
+                nameField.setText("");
+                studentIdField.setText("");
+                roomField.setText("");
+                emailField.setText("");
+                emergencyContactField.setText("");
+                remarkField.setText("");
+                tags.getChildren().clear();
             }
             phoneField.setText(newValue.getPhone().toString());
             nameField.setText(newValue.getName().toString());

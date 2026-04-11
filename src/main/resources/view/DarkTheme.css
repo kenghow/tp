@@ -207,6 +207,9 @@
     -fx-icon-color: white;
 }
 
+#profile {
+    -fx-background-color: transparent;
+}
 /* Table properties */
 .table-view {
     -fx-base: dark-grey;

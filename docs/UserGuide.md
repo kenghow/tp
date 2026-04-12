@@ -479,6 +479,10 @@ Exits the program.
 
 **Command:** `exit`
 
+<box type="tip">
+<b>Note:</b> <code>exit</code> will ignore any extraneous input provided. For example, <code>exit 123</code> will be treated the same as <code>exit</code>.
+</box>
+
 </div>
 
 ***

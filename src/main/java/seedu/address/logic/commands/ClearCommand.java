@@ -31,7 +31,7 @@ public class ClearCommand extends Command {
 
         int numberOfPersons = getNumberOfPersons(model);
         if (numberOfPersons == 0) {
-            throw new CommandException(MESSAGE_EMPTY_ADDRESS_BOOK);
+            throw new CommandException(MESSAGE_EMPT);
         }
 
         model.setAddressBook(new AddressBook());

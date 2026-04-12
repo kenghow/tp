@@ -41,7 +41,7 @@ public enum TagType {
      *
      * <p>Examples: {@code Computer Science}, {@code Philosophy}, {@code Economics & Finance}
      */
-    MAJOR(null, "^(?=.{1,100}$)[A-Za-z&]+(, ?[A-Za-z&]+)*( [A-Za-z&]+)*$"),
+    MAJOR(null, "^(?=.{1,100}$)[A-Za-z&]+([ ,]+[A-Za-z&]+)*$"),
 
     /**
      * Tag representing the resident's gender pronouns.

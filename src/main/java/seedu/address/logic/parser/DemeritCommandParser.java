@@ -24,11 +24,11 @@ public class DemeritCommandParser implements Parser<DemeritCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_STUDENT_ID, PREFIX_DEMERIT_INDEX, PREFIX_REMARK);
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_STUDENT_ID, PREFIX_DEMERIT_INDEX);
+
         if (!argMultimap.getValue(PREFIX_STUDENT_ID).isPresent()
                 || !argMultimap.getValue(PREFIX_DEMERIT_INDEX).isPresent()
-                || !argMultimap.getPreamble().isEmpty()
-                || hasDuplicateValues(argMultimap, PREFIX_STUDENT_ID)
-                || hasDuplicateValues(argMultimap, PREFIX_DEMERIT_INDEX)) {
+                || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DemeritCommand.MESSAGE_USAGE));
         }
 
@@ -37,12 +37,5 @@ public class DemeritCommandParser implements Parser<DemeritCommand> {
         String remark = argMultimap.getValue(PREFIX_REMARK).orElse("");
 
         return new DemeritCommand(studentId, ruleIndex, remark);
-    }
-
-    /**
-     * Returns true if the given prefix appears more than once in the input.
-     */
-    private boolean hasDuplicateValues(ArgumentMultimap argMultimap, Prefix prefix) {
-        return argMultimap.getAllValues(prefix).size() > 1;
     }
 }

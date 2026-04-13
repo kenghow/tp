@@ -117,8 +117,6 @@ If you enter an invalid year or gender keyword, Hall Ledger will not throw an er
 
 ## 5. How multiple filters combine
 
-<box type="info" seamless>
-
 - **Different prefixes** narrow the results — a resident must match **all** specified fields.
     - `find n=Alice y=1` → name matches `Alice` **and** year matches `1`.
     - `find ec=98765432 m=CS` → emergency contact matches `98765432` **and** major matches `CS`.
@@ -129,9 +127,8 @@ If you enter an invalid year or gender keyword, Hall Ledger will not throw an er
     - `find y=2 y=3` → year is `2` **or** `3`.
     - `find n=Alice n=Bob` → name matches `Alice` **or** `Bob`.
 
+<br>
 - Combining both of the above rules, **multiple filters with repeated prefixes** combine in a way that is best
   described as "AND of ORs" — a resident must match **all** fields, but for each field, they can match **any one** of
   the specified keywords.
     - `find n=Alice n=Bob y=2 y=3` → (name matches `Alice` **or** `Bob`) **and** (year is `2` **or** `3`).
-
-</box>

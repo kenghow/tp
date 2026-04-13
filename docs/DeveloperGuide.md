@@ -396,7 +396,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | RA             | delete residents                                     | remove residents no longer staying in hall                  |
 | `* * *`  | RA             | clear all residents                                  | quickly reset the system for a new semester                 |
 | `* * *`  | RA             | edit existing residents' information                 | maintain accurate and up-to-date resident records           |
-| `* * *`  | RA             | administer demerit points to a resident              | track resident behaviour incidents accurately               | |
+| `* * *`  | RA             | administer demerit points to a resident              | track resident behaviour incidents accurately               | 
 | `* * *`  | RA             | filter residents                                     | easily view and manage specific groups of resident students |
 | `* * *`  | RA             | add custom tags to residents                         | efficiently categorise residents                            |
 | `* * `   | RA             | administer CCA point records to a resident's profile | track their CCA contributions accurately                    |
@@ -405,8 +405,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | RA             | view resident demerit records                        | assess a resident's overall behaviour                       |
 | `* `     | RA             | generate occupancy reports by floor and room         | plan effectively for next semester's housing allocation     |
 | `* `     | RA             | export all data to a downloadable file               | share or analyse data externally for admin use              |
+| `* * *`  | RA             | add notes to a resident                              | keep other important information about a resident           |
 
-*{More to be added}*
 
 ### Use cases
 
@@ -589,9 +589,9 @@ Use case ends.
 
 * **Hall** : A residential building on campus that houses students. Each hall is made up of multiple blocks, and each block is made up of multiple rooms.
 * **RA** : Resident Assistant, a student leader who is responsible for managing a block of rooms in a hall and the students living in those rooms.
-* **CCA** : Co-Curricular Activities, which are activities that students participate in outside of their academic curriculum.
+* **CCA** : Co-Curricular Activities, which are activities that students participate in outside their academic curriculum.
+* **Demerit** : A penalty point assigned to a resident for a breach of the housing agreement. 
 * **DPS** : Demerit Point Structure used as the source reference for Hall Ledger’s demerit rule catalogue.
-* **Mainstream OS** : Windows, Linux, Unix, macOS.
 * **Non-technical users** : Users who are not familiar with technical jargon, command-line interfaces, or programming concepts.
 
 --------------------------------------------------------------------------------------------------------------------

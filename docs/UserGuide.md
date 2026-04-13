@@ -303,6 +303,12 @@ Suppose you want to find residents named "Alex" **or** "Bernice", who are in "Ye
 
 <box type="tip">
 
+<box type="warning">
+
+You are only allowed to enter at most 10 keywords per field.
+
+</box>
+
 **Tips:**
 
 * Matching ignores letter case, and keywords order does not matter.

@@ -412,12 +412,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 (For all use cases below, the **System** is Hall Ledger and the **Actor** is the Residential Assistant (RA), unless
 specified otherwise)
 
-**Use case: UC01 - Add a new student**
+**Use case: UC01 - Add a new resident**
 
 **MSS**
 
-1. RA requests to add a new student, providing the student's details (e.g., name, phone, email, room number, tags).
-2. Hall Ledger adds the new student.
+1. RA requests to add a new resident by providing the resident's details.
+2. Hall Ledger adds the new resident.
 3. Hall Ledger displays a success message with the added student's details.
 
 Use case ends.
@@ -475,24 +475,29 @@ Use case ends.
 * 1c. RA provides details that are exactly the same as the existing ones, resulting in no changes.
   Use case resumes from step 1.
 
-**Use case: UC04 - Delete or Clear student records**
+**Use case: UC04 - Delete resident**
 
 **MSS**
 
-1. RA requests to delete a specific student or clear all current student records.
-2. Hall Ledger deletes the specified student or clears all data.
-3. Hall Ledger displays a success message reflecting the changes.
+1. RA requests to delete a resident.
+2. Hall Ledger asks for confirmation
+3. RA confirms the deletion.
+4. Hall Ledger deletes the resident.
+5. Hall Ledger signals successful deletion to the RA. 
 
 Use case ends.
 
 **Extensions**
 
-* 1a. The student list is already empty.
+* 1a. Hall Ledger cannot find the resident.
   Use case ends.
 
 * 1b. If deleting, the given student ID is invalid.
     * 1b1. Hall Ledger shows an error message.
     Use case resumes from step 1.
+* 2a. RA cancels the deletion.
+    * 2a1. Hall Ledger cancels the deletion and returns to the previous state.
+    Use case ends.
 
 **Use case: UC05 - Search and filter students**
 

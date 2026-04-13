@@ -268,18 +268,21 @@ after using the Filter panel. This will allow you to see all residents again.
 **Usage:** `find [n=NAME] [p=PHONE] [e=EMAIL] [r=ROOM_NUMBER] [i=STUDENT_ID] [ec=EMERGENCY_CONTACT] [y=YEAR] [m=MAJOR] [g=GENDER]`
 
 **Example**
+
 Suppose you want to find all residents named "Alex":
 
 * Type in the command box: `find n=Alex`
 * The resident list updates to show all residents whose names match "Alex"
 
 **Example: Finding residents with different prefixes**
+
 Suppose you want to find residents named "Alex" who are in Year 2. You can search for both criteria at once:
 
 * Type in the command box: `find n=Alex y=2`
 * The resident list updates to show only residents who match **both** the name "Alex" **and** Year 2
 
 **Example: Finding residents using multiple keywords within the same criterion**
+
 Suppose you want to find residents named "Alex" or "Bernice". You can search for multiple values within the same
 criterion by repeating that field:
 
@@ -287,11 +290,13 @@ criterion by repeating that field:
 * The resident list updates to show only residents whose name match either "Alex" **or** "Bernice"
 
 **Advanced Example: Finding residents using multiple keywords and prefixes**
+
 Suppose you want to find residents named "Alex" **or** "Bernice", who are in "Year 1" **or** "Year 3".
 
 * Type in the command box: `find n=Alex n=Bernice y=1 y=3`
-* Suppose there are three residents: "Alex" in Year 1, and "Bernice" in Year 2, "Charlie" in Year 3. The resident list
-  updates to show only "Alex", because he is the only resident that matches both the name criteria (A or B) and
+* Suppose there are three residents: Alex in Year 1, and Bernice in Year 2, Charlie in Year 3. The resident list
+  updates to show only Alex, because he is the only resident that matches both the name criteria ("Alex" or "Bernice")
+  and
   the year criteria (1 or 3).
 
 ##### 7.2 Using the User Interface
@@ -329,15 +334,12 @@ Entering a command in the command box will reset the Filter panel.
 **Tips:**
 
 * Matching ignores letter case, and keyword order does not matter.
-* Using more than one filter field narrows your search results.
-* Using more keywords in one field widens your search results.
 * Hall Ledger supports fuzzy matching, so you may find results even with incomplete keywords or a small typo.
 * **Student ID** and **Year** uses exact matching (case-insensitive). Partial keywords or
-  typos might not return desired results. To search these fields, you are recommended to type in the correct and full
-  keywords (e.g. `find i=A1234567X` instead of `find i=A123`, or `find y=1` instead of `find y=Y1`).
+  typos might not return desired results.
 * **Gender** also uses exact matching, but allows some flexibility in what is considered a valid input. For example,
   `find g=she/her` is the same as `find g=she` or `find g=her`.
-* For more details, see [More Details on Find](MoreDetailsOnFind.md)
+* For more details, read the advanced guide in [More Details on Find](MoreDetailsOnFind.md)
 
 </box>
 

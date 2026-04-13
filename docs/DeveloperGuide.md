@@ -387,25 +387,24 @@ spreadsheets or manual lists, while providing a centralized and command-driven w
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a(n) …​ | I want to …​ | So that I can…​ |
-|----------|------------|--------------|-----------------|
-| `* * *`  | new user   | see usage instructions | refer to instructions when I forget how to use the App |
-| `* * *`  | RA         | add a new student contact | keep up-to-date records of students under my care |
-| `* * *`  | RA         | list all student contacts | get an overview of students assigned to me |
-| `* * *`  | RA         | search for existing student contacts | quickly find a specific resident's information |
-| `* * *`  | RA         | delete records of students | remove entries of students no longer in hall |
-| `* * *`  | RA         | clear all current student records | quickly reset the system for a new semester |
-| `* * *`  | RA         | edit existing contacts | maintain accurate and up-to-date student resident records |
-| `* * *`  | RA         | add demerit records to a student profile | track resident behaviour incidents accurately |
-| `* * `   | RA         | view the data file in JSON | enjoy data portability without opening the app |
-| `* * *`  | RA         | filter existing contacts based on attributes (e.g., block, year) | easily view and manage specific groups of resident students |
-| `* * *`  | RA         | add custom tags to students | allow for efficient categorisation of students |
-| `* * `   | RA         | add and administer CCA point records to a student's profile | track their CCA contributions accurately |
-| `* * `   | RA         | view student CCA records | minimize chance of someone else seeing them by accident |
-| `* `     | RA         | rank students by their total accumulated points | prioritize residents based on points-related review |
-| `* *`    | RA         | view student demerit records | assess a student's overall behaviour |
-| `* `     | RA         | generate occupancy reports by block and room | plan effectively for next semester's housing allocation |
-| `* `     | RA         | export all data to a CSV file | share or analyse data externally for admin use |
+| Priority | As a(n) …​     | I want to …​                                         | So that I can…​                                             |
+|----------|----------------|------------------------------------------------------|-------------------------------------------------------------|
+| `* * *`  | forgetful user | see usage instructions                               | refer to them when I forget how to use the App              |
+| `* * *`  | RA             | quickly add new residents                            | start tracking and supporting them right away               |
+| `* * *`  | RA             | view all residents at once                           | get an overview of residents assigned to me                 |
+| `* * *`  | RA             | search for existing residents                        | quickly find a specific resident's information              |
+| `* * *`  | RA             | delete residents                                     | remove residents no longer staying in hall                  |
+| `* * *`  | RA             | clear all residents                                  | quickly reset the system for a new semester                 |
+| `* * *`  | RA             | edit existing residents' information                 | maintain accurate and up-to-date resident records           |
+| `* * *`  | RA             | administer demerit points to a resident              | track resident behaviour incidents accurately               | |
+| `* * *`  | RA             | filter residents                                     | easily view and manage specific groups of resident students |
+| `* * *`  | RA             | add custom tags to residents                         | efficiently categorise residents                            |
+| `* * `   | RA             | administer CCA point records to a resident's profile | track their CCA contributions accurately                    |
+| `* * `   | RA             | view resident CCA records                            | see resident contributions to determine hall retention      |
+| `* `     | RA             | rank residents by their total accumulated points     | prioritize residents based on point-related review          |
+| `* *`    | RA             | view resident demerit records                        | assess a resident's overall behaviour                       |
+| `* `     | RA             | generate occupancy reports by floor and room         | plan effectively for next semester's housing allocation     |
+| `* `     | RA             | export all data to a downloadable file               | share or analyse data externally for admin use              |
 
 *{More to be added}*
 
@@ -418,9 +417,9 @@ specified otherwise)
 
 **MSS**
 
-1. RA requests to add a new student, providing the student's details (e.g., name, phone, email, room number, tags).
-2. Hall Ledger adds the new student.
-3. Hall Ledger displays a success message with the added student's details.
+1. RA requests to add a new resident by providing the resident's details 
+2. Hall Ledger adds the new resident.
+3. Hall Ledger indicates success to the RA
 
 Use case ends.
 
@@ -437,28 +436,28 @@ Use case ends.
     * 1c1. Hall Ledger shows an error message indicating the compulsory details.
     Use case resumes from step 1.
 
-**Use case: UC02 - View a student's details (basic info, demerit records)**
+**Use case: UC02 - View a resident's details**
 
 **MSS**
 
-1. RA requests to list all students.
-2. Hall Ledger shows a list of students.
-3. RA identifies a specific student from the list.
-4. Hall Ledger displays the student's basic information and current demerit total in the UI.
+1. RA requests to list all residents.
+2. Hall Ledger shows a list of residents.
+3. RA identifies a specific resident from the list.
+4. Hall Ledger displays the resident's basic information.
 
 Use case ends.
 
 **Extensions**
 
-* 2a. The student list is empty.
-    * 2a1. Hall Ledger indicates that the student list is empty.
+* 1a. Hall Ledger doesn't find any residents in the system.
+    * 1a1. Hall Ledger indicates that there are no residents.
     Use case ends.
 
 **Use case: UC03 - Edit a student's info**
 
 **MSS**
 
-1. RA requests to edit specific details (e.g., phone, email, room number, tags) of a student using their student ID.
+1. RA requests to edit a resident by providing the details to edit.
 2. Hall Ledger updates the student's details.
 3. Hall Ledger displays a success message with the updated student's details.
 
@@ -481,9 +480,11 @@ Use case ends.
 
 **MSS**
 
-1. RA requests to delete a specific student or clear all current student records.
-2. Hall Ledger deletes the specified student or clears all data.
-3. Hall Ledger displays a success message reflecting the changes.
+1. RA requests to delete a specific resident
+2. Hall Ledger requests confirmation from the RA to delete the resident.
+3. RA confirms the deletion.
+4. Hall Ledger deletes the specified resident
+5. Hall Ledger indicates success to the RA.
 
 Use case ends.
 
@@ -495,6 +496,9 @@ Use case ends.
 * 1b. If deleting, the given student ID is invalid.
     * 1b1. Hall Ledger shows an error message.
     Use case resumes from step 1.
+* 2a. RA cancels the deletion.
+    * 2a1. Hall Ledger aborts the deletion and returns to the previous state.
+    Use case ends.
 
 **Use case: UC05 - Search and filter students**
 

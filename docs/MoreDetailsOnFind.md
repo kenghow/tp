@@ -4,7 +4,7 @@ title: "Fuzzy Matching Details"
 pageNav: 3
 ---
 
-# Fuzzy Matching Details
+# More Details on Matching
 
 This page explains how Hall Ledger decides whether a resident matches your `find` input.
 

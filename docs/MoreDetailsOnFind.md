@@ -48,6 +48,8 @@ unrelated results.
 | `m=`   | Major tag         | Fuzzy                     | `m=computer sci` can match `Computer Science`.                                         |
 | `g=`   | Gender tag        | Exact (normalised)**      | `g=he` matches `he/him`; `g=her` matches `she/her`; `g=they/them` matches `they/them`. |
 
+------
+
 ## 3. Notes on exact-match fields
 
 \* **Student ID** uses exact matching because it is a unique identifier.
@@ -64,7 +66,9 @@ exactly one resident. This is a quick way to pull up a specific resident's profi
 Because the valid values are a small fixed set, the end result is effectively an exact match.
 See [Section 4](#4-note-on-year-and-gender-keywords) for details.
 
-## 4. Note on Year and Gender keywords
+------
+
+## 4. Note on Year and Gender
 
 Hall Ledger only accepts a fixed set of values for Year and Gender tags:
 
@@ -74,6 +78,8 @@ Hall Ledger only accepts a fixed set of values for Year and Gender tags:
 This is why the Filter Panel uses selection boxes for these two fields.
 
 ![Year and Gender Combo Box](images/combo-boxes.png)
+
+<br>
 
 **How normalisation works:**
 
@@ -88,6 +94,8 @@ search still runs normally.
 
 ![Warning - Ignored values](images/warning-ignored-values-for-year-and-gender.png)
 
+-----
+
 ## 5. How multiple filters combine
 
 <box type="info" seamless>
@@ -95,16 +103,12 @@ search still runs normally.
 - **Different prefixes** narrow the results — a resident must match **all** specified fields.
     - `find n=Alice y=1` → name matches `Alice` **and** year matches `1`.
     - `find ec=98765432 m=CS` → emergency contact matches `98765432` **and** major matches `CS`.
+
+<br>
+
 - **Repeating the same prefix** widens that filter — a resident only needs to match **any one** of those keywords.
     - `find y=2 y=3` → year is `2` **or** `3`.
     - `find n=Alice n=Bob` → name matches `Alice` **or** `Bob`.
     - `find n=Alice n=Bob y=2 y=3` → (name matches `Alice` **or** `Bob`) **and** (year is `2` **or** `3`).
 
 </box>
-
-## 6. Case sensitivity
-
-All `find` matching is case-insensitive.
-
-- `find n=alice` and `find n=ALICE` behave the same.
-- `find e=GMAIL` can match `gmail.com`.

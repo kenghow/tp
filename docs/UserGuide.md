@@ -401,35 +401,51 @@ Example usage:
 
 ### 9. Adding a Demerit Record to a Resident
 
+Hall Ledger lets you record structured demerit incidents for a resident. Each incident is based on a rule from the demerit rule catalogue.
+
 ##### 9.1 Listing Demerit Rules
 
 Shows the indexed demerit rules available in Hall Ledger.
 
 **Command:** `demeritlist`
 
+**Usage:** `demeritlist`
+
 * Displays the demerit rule catalogue together with the rule index and point tiers.
-* You can use the displayed rule index together with the `demerit` command when recording a resident’s demerit incident.
-* This list can also be viewed in the Demerit List Tab
+* Use this command before `demerit` if you are unsure which `RULE_INDEX` to use.
+* This list can also be viewed in the **Demerit List** tab.
+* `demeritlist` does not accept additional arguments.
 
 ##### 9.2 Adding a Demerit Record
 
-Adds a demerit record to an existing resident.
+Adds a demerit incident to an existing resident.
 
 **Command:** `demerit`
 
 **Usage:** `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`
 
 * Applies the demerit rule identified by `RULE_INDEX` to the resident identified by `STUDENT_ID`.
+* `STUDENT_ID` must refer to an existing resident in Hall Ledger.
 * `RULE_INDEX` must match one of the indexed rules shown by `demeritlist`.
-* If the same resident receives the same rule again, Hall Ledger automatically applies the next offence tier for that
-  rule.
+* If the same resident receives the same rule again, Hall Ledger automatically applies the next offence tier for that rule.
 * `rm=` is optional and can be used to store a short context note for that incident.
 * The resident’s displayed total demerit points will update after the command succeeds.
+* Each command should contain only one `i=` prefix and one `di=` prefix.
 
 Examples:
 * `demerit i=A1234567X di=18`
 * `demerit i=A1234567X di=18 rm=Visitor during quiet hours`
 * `demerit i=A0312075X di=28 rm=Common pantry left dirty`
+
+Expected result:
+* the demerit incident is added to the resident,
+* the offence tier and points are applied,
+* the resident’s total demerit points is updated,
+* and the incident can be viewed in the **Demerit Records** tab.
+
+<box type="info">
+<b>Current scope:</b> Hall Ledger records demerit incidents and accumulated totals. It does not automatically enforce semester-based or lifetime housing sanctions.
+</box>
 
 </div>
 
@@ -441,20 +457,24 @@ Examples:
 
 Deletes the resident identified by student ID from Hall Ledger.
 
-Format: `delete i=STUDENT_ID`
+**Command:** `delete`
+
+**Usage:** `delete i=STUDENT_ID`
 
 Example:
 * `delete i=A0312075X`
 
-After a valid delete command is entered, Hall Ledger shows a confirmation dialog before the resident is actually
-removed.
+After a valid delete command is entered, Hall Ledger shows a confirmation dialog before the resident is actually removed.
 
 * Press `Enter` or click **Confirm** to proceed with the deletion.
-* Press `Esc` or click **Cancel** to stop the deletion. 
-  * Hall Ledger will display the message `Deletion cancelled.` and no resident will
-    be removed.
+* Press `Esc` or click **Cancel** to stop the deletion.
+  * Hall Ledger will display `Deletion cancelled.` and no resident will be removed.
 
 If the command format is invalid, Hall Ledger will show an error message instead of opening the confirmation dialog.
+
+Notes:
+* The command must contain exactly one `i=` prefix.
+* Deletion cannot be undone after it is confirmed.
 
 ![Delete confirmation dialog](images/deleteConfirmation.png)
 

@@ -457,6 +457,26 @@ automatically enforce semester-based or lifetime housing sanctions tied to DPS t
 
 ---
 
+### How demerit incidents are applied
+
+The `demerit` command records a new demerit incident for a resident instead of directly editing a stored total. This keeps each rule breach auditable while allowing the total demerit points to be derived from the resident’s incident history.
+
+The flow is as follows:
+
+1. The user enters a command in the format `demerit i=STUDENT_ID di=RULE_INDEX [rm=REMARK]`.
+2. `DemeritCommandParser` checks that the required `i=` and `di=` prefixes are present, and rejects duplicate target or rule-index prefixes.
+3. The parser converts the student ID and rule index into their corresponding model-level values.
+4. `DemeritCommand` locates the resident identified by the given student ID.
+5. The command checks the resident’s existing demerit incidents to determine how many times the same rule has already been applied to that resident.
+6. The next offence number is computed from that history.
+7. The corresponding demerit points are retrieved from the demerit rule catalogue based on the rule index and offence number.
+8. A new demerit incident is added to the resident’s incident history.
+9. The resident’s total demerit points is updated indirectly because it is derived from the stored incident records.
+
+This design avoids storing duplicated derived state. The application only needs to store the individual incidents, while the accumulated total can be reconstructed from the resident’s demerit history.
+
+---
+
 ### Demerit records UI
 
 Hall Ledger provides a dedicated **Demerit Records** tab for the currently selected resident.
@@ -475,6 +495,23 @@ This design was chosen because:
 * Residential assistants often need both the current total and the incident history,
 * showing only a running total would hide important context,
 * and separating demerit records into a dedicated tab keeps the interface organized.
+
+---
+
+### How delete confirmation flow works
+
+The `delete` command removes a resident identified by student ID. Since deletion is destructive, Hall Ledger adds a confirmation step before executing the command.
+
+The flow is as follows:
+
+1. The user enters a command in the format `delete i=STUDENT_ID`.
+2. `DeleteCommandParser` checks that exactly one `i=` prefix is provided and parses the student ID.
+3. Before the command is executed, `MainWindow` detects that the parsed command is a `DeleteCommand`.
+4. `MainWindow` opens a confirmation dialog asking whether the resident should be deleted.
+5. If the user confirms, the delete command is executed through the usual `Logic` flow.
+6. If the user cancels, the command is not executed and the result display shows `Deletion cancelled.`
+
+The confirmation dialog is intended to reduce accidental deletion of resident records. To better support the typing-preferred workflow, the dialog is keyboard-friendly: pressing `Enter` confirms deletion, while pressing `Esc` cancels deletion.
 
 </div>
 
@@ -542,7 +579,7 @@ Within the `DemeritIncidents` object, data is stored in the following format:
 }
 ```
 
-* The `pointsApplied` field depends on the `ruleIndex` and increases with increase in `offenseNumber`. See the [Demerit Implementation] for more details.
+* The `pointsApplied` field depends on the `ruleIndex` and the offence number. See [Demerit point tracking](#demerit-point-tracking) and [How demerit incidents are applied](#how-demerit-incidents-are-applied) for more details.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -911,6 +948,21 @@ This section provides instructions on how to do simple testing with the find com
       `demerit i=A1234567X di=999`
    2. Verify that Hall Ledger rejects the command.
 
+5. Duplicate demerit rule index
+   1. Enter  
+      `demerit i=A1234567X di=18 di=1`
+   2. Verify that Hall Ledger rejects the command because the demerit rule index prefix is duplicated.
+
+6. Duplicate student ID
+   1. Enter  
+      `demerit i=A1234567X i=A7654321X di=18`
+   2. Verify that Hall Ledger rejects the command because the student ID prefix is duplicated.
+
+7. Extra arguments for demerit rule list
+   1. Enter  
+      `demeritlist x`
+   2. Verify that Hall Ledger rejects the command because `demeritlist` does not take additional arguments.
+
 ---
 
 ### Deleting a resident
@@ -922,6 +974,23 @@ This section provides instructions on how to do simple testing with the find com
    Expected: the resident remains.
 4. Repeat and confirm the deletion.
    Expected: the resident is removed.
+
+5. Duplicate student ID prefix
+   1. Enter  
+      `delete i=A1234567X i=A7654321X`
+   2. Verify that Hall Ledger rejects the command before showing the confirmation dialog.
+
+6. Keyboard-only cancellation
+   1. Enter  
+      `delete i=A1234567X`
+   2. When the confirmation dialog appears, press `Esc`.
+   3. Verify that the resident remains in the list and the result display shows that deletion was cancelled.
+
+7. Keyboard-only confirmation
+   1. Enter  
+      `delete i=A1234567X`
+   2. When the confirmation dialog appears, press `Enter`.
+   3. Verify that the resident is deleted.
 
 </div>
 
@@ -946,7 +1015,7 @@ Team size: 5
 
 4. Make tag-validation error messages more specific: Hall Ledger currently rejects invalid tag inputs, but some error messages can still be made more precise. We plan to state more clearly which tag field failed validation and why.
 
-5. Improve delete-confirmation feedback: Hall Ledger currently confirms deletion using a modal dialog. We plan to make the feedback around cancellation and confirmation even clearer so users can more easily distinguish between aborted and completed deletion flows.
+5. Make delete confirmation more typing-efficient: Hall Ledger currently confirms deletion using a modal dialog. Although the dialog supports keyboard input, it still interrupts the command-line workflow. We plan to revise the delete confirmation flow so users can confirm or cancel deletion more efficiently while still protecting against accidental deletion.
 
 6. Make repeated-demerit feedback more informative: Hall Ledger currently shows the applied rule, remark, points added, and updated total. We plan to also surface the offence number more prominently in the success feedback for easier verification.
 
